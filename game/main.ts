@@ -3,6 +3,7 @@
 import { createCanvas } from "../engine/html";
 import { setupInput, isKeyJustPressed, resetInput } from "../engine/input";
 import { startEngine } from "../engine/core";
+import { renderText } from "../engine/renderer";
 
 const { canvas, ctx } = createCanvas(400, 400);
 setupInput(canvas);
@@ -69,6 +70,8 @@ function gameLoop(dt: number) {
 
   ctx.fillStyle = "red";
   ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
+
+  renderText(ctx, "Score: ", 10, 10, "yellow", "24px Arial");
 
   resetInput();
 }

@@ -4,6 +4,10 @@ const textures: Record<string, HTMLImageElement> = {};
 
 export type Texture = HTMLImageElement | undefined;
 
+function getresourcepath(path: string): string {
+    return "dist/resources/" + path;
+}
+
 // Function to load a Texture Async
 export function loadTextureAsync(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
@@ -14,7 +18,7 @@ export function loadTextureAsync(src: string): Promise<HTMLImageElement> {
         const img = new Image();
 
         // 🔹 Hier Pfad modifizieren, z.B. Prefix hinzufügen
-        let finalSrc = `resources/${src}`;
+        let finalSrc = getresourcepath(src);
 
         img.onload = () => {
             // Cache speichern
@@ -34,7 +38,7 @@ export function loadTextureAsync(src: string): Promise<HTMLImageElement> {
 }
 
 export function getTexture(src: string): Texture {
-    return textures[src];
+    return textures[getresourcepath(src)];
 }
 
 export function drawTexture(

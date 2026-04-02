@@ -42,13 +42,13 @@ function gameLoop(dt: number) {
         }
 
         // Versuche die Texture nochmal zu holen, falls sie jetzt geladen ist
-        texture = getTexture("resources/init.png");
+        texture = getTexture("init.png");
 
         return;
     }
 
     // drawTexture zeigt magenta, wenn texture fehlt, und loggt Fehler
-    drawTexture(ctx, texture, 50, 50, 100, 100, "resources/init.png");
+    drawTexture(ctx, texture, 50, 50, 100, 100);
 
     resetInput();
 

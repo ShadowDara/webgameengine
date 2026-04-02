@@ -1,12 +1,15 @@
-export function createCanvas(width: number, height: number) {
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
+export function createCanvas(width: number, height: number): {
+    canvas: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
+} {
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
 
-  document.body.appendChild(canvas);
+    document.body.appendChild(canvas);
 
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("No context");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("No context");
 
-  return { canvas, ctx };
+    return { canvas, ctx };
 }

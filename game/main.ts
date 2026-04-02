@@ -4,15 +4,15 @@ import { createCanvas } from "../engine/html";
 import { setupInput, isKeyJustPressed, resetInput } from "../engine/input";
 import { startEngine } from "../engine/core";
 import { renderText } from "../engine/renderer";
+import { Vector2 } from "../engine/types/vector2d";
+import { dlog } from "../engine/logger";
 
 const { canvas, ctx } = createCanvas(400, 400);
 setupInput(canvas);
 
-type Point = { x: number; y: number };
-
-let snake: Point[] = [{ x: 10, y: 10 }];
-let dir: Point = { x: 1, y: 0 };
-let food: Point = { x: 15, y: 10 };
+let snake: Vector2[] = [{ x: 10, y: 10 }];
+let dir: Vector2 = { x: 1, y: 0 };
+let food: Vector2 = { x: 15, y: 10 };
 let gridSize = 20;
 let lastMove = 0;
 let speed = 0.2; // seconds per cell
@@ -37,7 +37,7 @@ function gameLoop(dt: number) {
     if (head.x < 0 || head.y < 0 || head.x >= canvas.width / gridSize || head.y >= canvas.height / gridSize) {
       snake = [{ x: 10, y: 10 }];
       dir = { x: 1, y: 0 };
-      console.log("Game Over");
+      dlog("Game Over");
       return;
     }
 
@@ -45,7 +45,7 @@ function gameLoop(dt: number) {
     if (snake.some(s => s.x === head.x && s.y === head.y)) {
       snake = [{ x: 10, y: 10 }];
       dir = { x: 1, y: 0 };
-      console.log("Game Over");
+      dlog("Game Over");
       return;
     }
 

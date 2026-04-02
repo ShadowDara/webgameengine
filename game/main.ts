@@ -20,73 +20,74 @@ let speed = 0.2; // seconds per cell
 let start = false;
 
 function gameStart() {
-  dlog("Snake gestartet");
+    dlog("Snake gestartet");
 }
 
 function gameLoop(dt: number) {
-  if (!start) {
-    renderText(ctx, "Snake", 10, 10, "black", "24px Arial");
-    renderText(ctx, "Press ESC to start the Game!", 10, 50, "black", "24px Arial");
-    
-    if (isKeyJustPressed(Key.Escape)) {
-      start = true;
+    if (!start) {
+        renderText(ctx, "Snake", 10, 10, "black", "24px Arial");
+        renderText(ctx, "Press ESC to start the Game!", 10, 50, "black", "24px Arial");
+
+        if (isKeyJustPressed(Key.Escape)) {
+            start = true;
+        }
+
+        return;
     }
 
-    return;
-  }
+    // Input
+    if (isKeyJustPressed(Key.ArrowUp) && dir.y === 0) dir = { x: 0, y: -1 };
+    if (isKeyJustPressed(Key.ArrowDown) && dir.y === 0) dir = { x: 0, y: 1 };
+    if (isKeyJustPressed(Key.ArrowLeft) && dir.x === 0) dir = { x: -1, y: 0 };
+    if (isKeyJustPressed(Key.ArrowRight) && dir.x === 0) dir = { x: 1, y: 0 };
 
-  // Input
-  if (isKeyJustPressed(Key.ArrowUp) && dir.y === 0) dir = { x: 0, y: -1 };
-  if (isKeyJustPressed(Key.ArrowDown) && dir.y === 0) dir = { x: 0, y: 1 };
-  if (isKeyJustPressed(Key.ArrowLeft) && dir.x === 0) dir = { x: -1, y: 0 };
-  if (isKeyJustPressed(Key.ArrowRight) && dir.x === 0) dir = { x: 1, y: 0 };
+    lastMove += dt;
 
-  lastMove += dt;
-  if (lastMove >= speed) {
-    lastMove = 0;
-    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+    if (lastMove >= speed) {
+        lastMove = 0;
+        const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
 
-    // Kollision mit Walls
-    if (head.x < 0 || head.y < 0 || head.x >= canvas.width / gridSize || head.y >= canvas.height / gridSize) {
-      snake = [{ x: 10, y: 10 }];
-      dir = { x: 1, y: 0 };
-      dlog("Game Over");
-      return;
+        // Kollision mit Walls
+        if (head.x < 0 || head.y < 0 || head.x >= canvas.width / gridSize || head.y >= canvas.height / gridSize) {
+            snake = [{ x: 10, y: 10 }];
+            dir = { x: 1, y: 0 };
+            dlog("Game Over");
+            return;
+        }
+
+        // Kollision mit sich selbst
+        if (snake.some(s => s.x === head.x && s.y === head.y)) {
+            snake = [{ x: 10, y: 10 }];
+            dir = { x: 1, y: 0 };
+            dlog(`Game Over! Highscore: ${snake.length - 1}`);
+            return;
+        }
+
+        snake.unshift(head);
+
+        // Food Check
+        if (head.x === food.x && head.y === food.y) {
+            food = { x: Math.floor(Math.random() * (canvas.width / gridSize)), y: Math.floor(Math.random() * (canvas.height / gridSize)) };
+        } else {
+            snake.pop();
+        }
     }
 
-    // Kollision mit sich selbst
-    if (snake.some(s => s.x === head.x && s.y === head.y)) {
-      snake = [{ x: 10, y: 10 }];
-      dir = { x: 1, y: 0 };
-      dlog(`Game Over! Highscore: ${snake.length - 1}`);
-      return;
-    }
+    // Zeichnen
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    snake.unshift(head);
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Food Check
-    if (head.x === food.x && head.y === food.y) {
-      food = { x: Math.floor(Math.random() * (canvas.width / gridSize)), y: Math.floor(Math.random() * (canvas.height / gridSize)) };
-    } else {
-      snake.pop();
-    }
-  }
+    ctx.fillStyle = "green";
+    snake.forEach(s => ctx.fillRect(s.x * gridSize, s.y * gridSize, gridSize, gridSize));
 
-  // Zeichnen
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "red";
+    ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
 
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    renderText(ctx, "Score: " + (snake.length - 1), 10, 10, "yellow", "24px Arial");
 
-  ctx.fillStyle = "green";
-  snake.forEach(s => ctx.fillRect(s.x * gridSize, s.y * gridSize, gridSize, gridSize));
-
-  ctx.fillStyle = "red";
-  ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
-
-  renderText(ctx, "Score: " + (snake.length - 1), 10, 10, "yellow", "24px Arial");
-
-  resetInput();
+    resetInput();
 }
 
 startEngine(gameStart, gameLoop);

@@ -17,12 +17,24 @@ let food: Vector2 = { x: 15, y: 10 };
 let gridSize = 20;
 let lastMove = 0;
 let speed = 0.2; // seconds per cell
+let start = false;
 
 function gameStart() {
   dlog("Snake gestartet");
 }
 
 function gameLoop(dt: number) {
+  if (!start) {
+    renderText(ctx, "Snake", 10, 10, "black", "24px Arial");
+    renderText(ctx, "Press ESC to start the Game!", 10, 50, "black", "24px Arial");
+    
+    if (isKeyJustPressed(Key.Escape)) {
+      start = true;
+    }
+
+    return;
+  }
+
   // Input
   if (isKeyJustPressed(Key.ArrowUp) && dir.y === 0) dir = { x: 0, y: -1 };
   if (isKeyJustPressed(Key.ArrowDown) && dir.y === 0) dir = { x: 0, y: 1 };

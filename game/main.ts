@@ -1,0 +1,76 @@
+// A mini Snake Clone with my Webframework
+
+import { createCanvas } from "../engine/html";
+import { setupInput, isKeyJustPressed, resetInput } from "../engine/input";
+import { startEngine } from "../engine/core";
+
+const { canvas, ctx } = createCanvas(400, 400);
+setupInput(canvas);
+
+type Point = { x: number; y: number };
+
+let snake: Point[] = [{ x: 10, y: 10 }];
+let dir: Point = { x: 1, y: 0 };
+let food: Point = { x: 15, y: 10 };
+let gridSize = 20;
+let lastMove = 0;
+let speed = 0.2; // seconds per cell
+
+function gameStart() {
+  console.log("Snake gestartet");
+}
+
+function gameLoop(dt: number) {
+  // Input
+  if (isKeyJustPressed("ArrowUp") && dir.y === 0) dir = { x: 0, y: -1 };
+  if (isKeyJustPressed("ArrowDown") && dir.y === 0) dir = { x: 0, y: 1 };
+  if (isKeyJustPressed("ArrowLeft") && dir.x === 0) dir = { x: -1, y: 0 };
+  if (isKeyJustPressed("ArrowRight") && dir.x === 0) dir = { x: 1, y: 0 };
+
+  lastMove += dt;
+  if (lastMove >= speed) {
+    lastMove = 0;
+    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+    // Kollision mit Walls
+    if (head.x < 0 || head.y < 0 || head.x >= canvas.width / gridSize || head.y >= canvas.height / gridSize) {
+      snake = [{ x: 10, y: 10 }];
+      dir = { x: 1, y: 0 };
+      console.log("Game Over");
+      return;
+    }
+
+    // Kollision mit sich selbst
+    if (snake.some(s => s.x === head.x && s.y === head.y)) {
+      snake = [{ x: 10, y: 10 }];
+      dir = { x: 1, y: 0 };
+      console.log("Game Over");
+      return;
+    }
+
+    snake.unshift(head);
+
+    // Food Check
+    if (head.x === food.x && head.y === food.y) {
+      food = { x: Math.floor(Math.random() * (canvas.width / gridSize)), y: Math.floor(Math.random() * (canvas.height / gridSize)) };
+    } else {
+      snake.pop();
+    }
+  }
+
+  // Zeichnen
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "green";
+  snake.forEach(s => ctx.fillRect(s.x * gridSize, s.y * gridSize, gridSize, gridSize));
+
+  ctx.fillStyle = "red";
+  ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
+
+  resetInput();
+}
+
+startEngine(gameStart, gameLoop);

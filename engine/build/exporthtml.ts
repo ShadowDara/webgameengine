@@ -53,7 +53,7 @@ ${fullscreenbutton}
   </head>
   <body>
     ${fullscreenBtn}
-    <script type="module" src="${config.entryname}"></script>
+    <script type="module" src="${config.entryname}.js"></script>
   </body>
 </html>
 `;

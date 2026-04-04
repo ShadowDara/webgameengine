@@ -18,6 +18,18 @@ async function build(config: buildconfig) {
 
     flog("🔄 Baue neu...");
 
+
+    await Bun.build({
+        entrypoints: ["./game/" + config.entryname], // <-- hier dynamisch
+        outdir: "./" + config.outdir,
+        target: "browser",
+        minify: isRelease,
+        sourcemap: isRelease ? false : "linked",
+        define: {
+            "import.meta.env.DEV": JSON.stringify(isDev),
+        },
+    });
+
     let inhalt = GetDefaultHTML(config);
 
     await writeFile('./dist/index.html', inhalt, (err) => {
@@ -26,17 +38,6 @@ async function build(config: buildconfig) {
         } else {
             console.log('Datei erfolgreich geschrieben!');
         }
-    });
-
-    await Bun.build({
-        entrypoints: [config.entryname], // <-- hier dynamisch
-        outdir: "./" + config.outdir,
-        target: "browser",
-        minify: isRelease,
-        sourcemap: isRelease ? false : "linked",
-        define: {
-            "import.meta.env.DEV": JSON.stringify(isDev),
-        },
     });
 
     // resources kopieren
@@ -64,20 +65,18 @@ function startServer() {
 
             // WebSocket Upgrade
             if (url.pathname === "/ws") {
-                if (server.upgrade(req)) {
-                    return;
-                }
+                if (server.upgrade(req)) return;
                 return new Response("Upgrade failed", { status: 500 });
             }
 
+            // Pfad auf dist umleiten
             let path = url.pathname === "/" ? "/index.html" : url.pathname;
 
             try {
-                const file = Bun.file(`.${path}`);
+                // Dateien aus ./dist laden
+                const file = Bun.file(`./dist${path}`);
                 return new Response(file, {
-                    headers: {
-                        "Content-Type": getContentType(path),
-                    },
+                    headers: { "Content-Type": getContentType(path) },
                 });
             } catch {
                 return new Response("Not Found", { status: 404 });
@@ -85,16 +84,12 @@ function startServer() {
         },
 
         websocket: {
-            open(ws) {
-                sockets.add(ws);
-            },
-            close(ws) {
-                sockets.delete(ws);
-            },
+            open(ws) { sockets.add(ws); },
+            close(ws) { sockets.delete(ws); },
         },
     });
 
-    flog("🚀 Dev Server läuft auf http://localhost:3000");
+    flog("🚀 Dev Server läuft auf http://localhost:3000 (aus ./dist)");
 }
 
 // to relaod the client

@@ -13,7 +13,7 @@ export function new_buildconfig(): buildconfig {
         htmlhead: "",
         title: "My new Game",
         show_fullscreen_button: true,
-        entryname: "./game/main.ts",
+        entryname: "main",
         outdir: "dist",
     }
 }

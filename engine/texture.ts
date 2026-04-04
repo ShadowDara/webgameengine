@@ -5,7 +5,7 @@ const textures: Record<string, HTMLImageElement> = {};
 export type Texture = HTMLImageElement | undefined;
 
 function getresourcepath(path: string): string {
-    return "dist/resources/" + path;
+    return "resources/" + path;
 }
 
 // Function to load a Texture Async

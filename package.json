@@ -1,6 +1,48 @@
 {
-  "name": "webgameengine",
-  "private": true,
+  "name": "@yourusername/webgameengine",
+  "version": "0.1.0",
+  "description": "A lightweight web game engine framework with TypeScript support",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./engine": {
+      "types": "./dist/engine/index.d.ts",
+      "default": "./dist/engine/index.js"
+    },
+    "./tools": {
+      "types": "./dist/tools/index.d.ts",
+      "default": "./dist/tools/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "bun build ./engine/index.ts ./tools/index.ts --outdir ./dist --target browser",
+    "dev": "bun run tools/build.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/webgameengine.git"
+  },
+  "keywords": [
+    "game",
+    "engine",
+    "gamedev",
+    "2d",
+    "web",
+    "typescript"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
   "devDependencies": {
     "@types/bun": "latest"
   },

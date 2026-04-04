@@ -1,0 +1,19 @@
+# Source files
+engine/
+tools/
+game/
+resources/
+
+# Dev files
+*.test.ts
+tsconfig.json
+*.map
+.vscode/
+
+# Config files
+project.ts
+build.ts
+
+# Node/Bun
+node_modules/
+bun.lockb

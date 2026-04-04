@@ -31,6 +31,3 @@ export type { Rect } from "./types/rectangle";
 
 // Math Utilities
 export * from "./types/math-utils";
-
-// Build Configuration
-export { type buildconfig, new_buildconfig } from "./build/buildconfig";

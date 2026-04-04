@@ -9,14 +9,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    },
-    "./engine": {
-      "types": "./dist/engine/index.d.ts",
-      "default": "./dist/engine/index.js"
-    },
-    "./tools": {
-      "types": "./dist/tools/index.d.ts",
-      "default": "./dist/tools/index.js"
     }
   },
   "files": [
@@ -25,9 +17,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "bun build ./engine/index.ts ./tools/index.ts --outdir ./dist --target browser",
-    "dev": "bun run tools/build.ts",
-    "type-check": "tsc --noEmit"
+    "dev": "bun run tools/build.ts"
   },
   "repository": {
     "type": "git",

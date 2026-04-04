@@ -21,3 +21,7 @@ project.ts
 node_modules/
 bun.lock
 index.ts
+
+*.tar
+*.gz
+*.tgz

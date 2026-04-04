@@ -4,9 +4,9 @@
 
 import { build as esbuild } from "esbuild";
 
-import { copyFolder, flog, getContentType } from "../buildhelper.js";
-import { buildconfig } from "../buildconfig.js";
-import { GetDefaultHTML } from "../exporthtml.js";
+import { copyFolder, flog, getContentType } from "../../buildhelper.js";
+import { buildconfig } from "../../buildconfig.js";
+import { GetDefaultHTML } from "../../exporthtml.js";
 
 import { createServer } from "http";
 import { readFile, writeFile } from "fs/promises";
@@ -18,6 +18,7 @@ import { loadUserConfig } from "./config.js";
 
 
 const config = await loadUserConfig();
+console.log("CONFIG:", config);
 
 let isBuilding = false;
 const isRelease = process.argv.includes("--release");

@@ -11,7 +11,12 @@
     "build": "tsc"
   },
   "bin": {
-    "webgameengine": "dist/build/devserver/cli.js"
+    "webgameengine": "dist/build/tools/devserver/cli.js"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./build": "./dist/build/index.js",
+    "./types": "./dist/types/index.js"
   },
   "keywords": [
     "game",

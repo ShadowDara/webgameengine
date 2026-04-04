@@ -1,33 +1,24 @@
 // Core Engine Exports
-export { startEngine } from "./core";
+export { startEngine } from "./core.js";
 
 // Rendering
-export { renderText, renderBitmapText } from "./renderer";
+export { renderText, renderBitmapText } from "./renderer.js";
 
 // Input System
-export { setupInput } from "./input";
-export type { Mouse } from "./input";
+export { setupInput, isKeyJustPressed, resetInput, getMouse } from "./input.js";
+export type { Mouse } from "./input.js";
 
 // Logging
-export { dlog } from "./logger";
+export { dlog } from "./logger.js";
 
 // Save System
-export * from "./save";
+export * from "./save.js";
 
 // Texture Management
-export * from "./texture";
+export * from "./texture.js";
 
 // HTML Generation
-export * from "./html";
+export * from "./html.js";
 
 // Keys Reference
-export * from "./keys";
-
-// Types
-export type { Vector2d } from "./types/vector2d";
-export type { Vector3d } from "./types/vector3d";
-export type { Color } from "./types/color";
-export type { Rect } from "./types/rectangle";
-
-// Math Utilities
-export * from "./types/math-utils";
+export * from "./keys.js";

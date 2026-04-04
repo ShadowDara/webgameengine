@@ -12,13 +12,13 @@ export type { Mouse } from "./input.js";
 export { dlog } from "./logger.js";
 
 // Save System
-export * from "./save.js";
+export { saveGame, loadGame, clearSave } from "./save.js";
 
 // Texture Management
-export * from "./texture.js";
+export { drawTexture, getTexture, type Texture, loadTextureAsync } from "./texture.js";
 
 // HTML Generation
-export * from "./html.js";
+export { createCanvas, enableFullscreen, setupFullscreenButton } from "./html.js";
 
 // Keys Reference
-export * from "./keys.js";
+export { Key } from "./keys.js";

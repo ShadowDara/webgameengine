@@ -9,4 +9,4 @@ export type { Rect } from "./rectangle.js";
 export { isRectClicked } from "./rectangle.js";
 
 // Math Utilities
-export * from "./math-utils.js";
+// export * from "./math-utils.js";

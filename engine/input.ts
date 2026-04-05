@@ -13,6 +13,9 @@ export type Mouse = {
     justReleased: boolean;
 
     rightPressed: boolean;
+    rightjustPressed: boolean;
+    rightjustReleased: boolean;
+
     wheelDelta: number;
 };
 
@@ -30,6 +33,8 @@ const mouse: Mouse = {
     // TODO
     // do the same for the right Buttons
     rightPressed: false,
+    rightjustPressed: false,
+    rightjustReleased: false,
     
     wheelDelta: 0,
 };
@@ -74,6 +79,7 @@ export function setupInput(canvas: HTMLCanvasElement, vWidth = 800, vHeight = 80
         }
 
         if (e.button === 2) {
+            if (!mouse.rightPressed) mouse.rightjustPressed = true;
             mouse.rightPressed = true;
         }
     });
@@ -86,6 +92,7 @@ export function setupInput(canvas: HTMLCanvasElement, vWidth = 800, vHeight = 80
 
         if (e.button === 2) {
             mouse.rightPressed = false;
+            mouse.rightjustReleased = false;
         }
     });
 
@@ -147,6 +154,9 @@ export function resetInput() {
 
     mouse.justPressed = false;
     mouse.justReleased = false;
+
+    mouse.rightjustPressed = false;
+    mouse.rightjustReleased = false;
 
     mouse.wheelDelta = 0;
 }

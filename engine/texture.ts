@@ -1,4 +1,5 @@
 import { dlog } from "./logger.js";
+import { Rect } from "./types/rectangle.js";
 
 const textures: Record<string, HTMLImageElement> = {};
 
@@ -37,17 +38,22 @@ export function loadTextureAsync(src: string): Promise<HTMLImageElement> {
     });
 }
 
+// Function to get the Texture
 export function getTexture(src: string): Texture {
     return textures[getresourcepath(src)];
 }
 
+// Function to draw a texture to the Screen
 export function drawTexture(
     ctx: CanvasRenderingContext2D,
     texture: Texture,
     x: number,
     y: number,
     width?: number,
-    height?: number
+    height?: number,
+    rotation: number = 0,
+    flipX: boolean = false,
+    flipY: boolean = false
 ): void {
     if (!texture) {
         dlog("Texture not found");
@@ -57,9 +63,211 @@ export function drawTexture(
         return;
     }
 
-    if (width && height) {
-        ctx.drawImage(texture, x, y, width, height);
-    } else {
-        ctx.drawImage(texture, x, y);
+    const w = width ?? texture.width;
+    const h = height ?? texture.height;
+
+    ctx.save();
+
+    const cx = x + w / 2;
+    const cy = y + h / 2;
+
+    ctx.translate(cx, cy);
+    ctx.rotate(rotation);
+
+    // 🔹 Flip anwenden
+    ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+
+    ctx.drawImage(texture, -w / 2, -h / 2, w, h);
+
+    ctx.restore();
+}
+
+// Texture Atlas Type
+export type TextureAtlas = {
+    image: HTMLImageElement;
+    frames: Record<string, Rect>;
+};
+
+// Funtion to load an Atlas
+//
+// JSON Format for the LoadAtlas Function
+//
+// {
+//   "frames": {
+//     "player_idle_0": { "x": 0, "y": 0, "w": 32, "h": 32 },
+//     "player_idle_1": { "x": 32, "y": 0, "w": 32, "h": 32 }
+//   }
+// }
+//
+export async function loadAtlas(
+    imageSrc: string,
+    dataSrc: string
+): Promise<TextureAtlas> {
+    const [image, data] = await Promise.all([
+        loadTextureAsync(imageSrc),
+        fetch(getresourcepath(dataSrc)).then(r => r.json())
+    ]);
+
+    return {
+        image,
+        frames: data.frames
+    };
+}
+
+export function drawAtlasFrame(
+    ctx: CanvasRenderingContext2D,
+    atlas: TextureAtlas,
+    frameName: string,
+    x: number,
+    y: number,
+    width?: number,
+    height?: number,
+    rotation: number = 0,
+    flipX: boolean = false,
+    flipY: boolean = false
+) {
+    const frame = atlas.frames[frameName];
+
+    if (!frame) {
+        dlog(`Frame not found: ${frameName}`);
+        return;
     }
+
+    const w = width ?? frame.width;
+    const h = height ?? frame.height;
+
+    ctx.save();
+
+    const cx = x + w / 2;
+    const cy = y + h / 2;
+
+    ctx.translate(cx, cy);
+    ctx.rotate(rotation);
+
+    // 🔹 Flip
+    ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+
+    ctx.drawImage(
+        atlas.image,
+        frame.x,
+        frame.y,
+        frame.width,
+        frame.height,
+        -w / 2,
+        -h / 2,
+        w,
+        h
+    );
+
+    ctx.restore();
+}
+
+//
+//
+// Animation Player
+//
+//
+//
+// // Define Animation
+// const walkAnimation: Animation = {
+//     frames: ["walk_0", "walk_1", "walk_2", "walk_3"],
+//     fps: 8,
+//     loop: true
+// };
+//
+// const player = new AnimationPlayer(walkAnimation);
+//
+// // Game Loop
+// function update(dt: number) {
+//     player.update(dt);
+// }
+//
+// function render(ctx: CanvasRenderingContext2D) {
+//     drawAnimation(ctx, atlas, player, 100, 100, 64, 64);
+// }
+//
+//
+// Animation Player Class
+export class AnimationPlayer {
+    private time = 0;
+    private currentFrameIndex = 0;
+    private finished = false;
+
+    // Konstruktor Function
+    constructor(public animation: Animation) {}
+
+    update(deltaTime: number) {
+        if (this.finished) return;
+
+        this.time += deltaTime;
+
+        const frameDuration = 1 / this.animation.fps;
+
+        while (this.time >= frameDuration) {
+            this.time -= frameDuration;
+            this.currentFrameIndex++;
+
+            if (this.currentFrameIndex >= this.animation.frames.length) {
+                if (this.animation.loop) {
+                    this.currentFrameIndex = 0;
+                } else {
+                    this.currentFrameIndex = this.animation.frames.length - 1;
+                    this.finished = true;
+                }
+            }
+        }
+    }
+
+    getCurrentFrame(): string {
+        return this.animation.frames[this.currentFrameIndex];
+    }
+
+    reset() {
+        this.time = 0;
+        this.currentFrameIndex = 0;
+        this.finished = false;
+    }
+
+    isFinished(): boolean {
+        return this.finished;
+    }
+}
+
+// Animation Type
+export type Animation = {
+    frames: string[];
+    fps: number;
+    loop?: boolean;
+};
+
+export function drawAnimation(
+    ctx: CanvasRenderingContext2D,
+    atlas: TextureAtlas,
+    player: AnimationPlayer,
+    x: number,
+    y: number,
+    width?: number,
+    height?: number,
+    rotation: number = 0,
+    flipX: boolean = false,
+    flipY: boolean = false
+) {
+    const frame = player.getCurrentFrame();
+
+    drawAtlasFrame(
+        ctx,
+        atlas,
+        frame,
+        x,
+        y,
+        width,
+        height,
+        rotation,
+        flipX,
+        flipY
+    );
+}
+
+export function getFlipFromDirection(dir: number): boolean {
+    return dir < 0; // links = true
 }

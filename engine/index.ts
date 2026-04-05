@@ -2,23 +2,58 @@
 export { startEngine } from "./core.js";
 
 // Rendering
-export { renderText, renderBitmapText } from "./renderer.js";
+export {
+    renderText,
+    renderBitmapText,
+    drawRect,
+    drawRectOutline,
+    drawCircle,
+    drawCircleOutline,
+    drawTriangle,
+    drawTriangleOutline,
+} from "./renderer.js";
 
 // Input System
-export { setupInput, isKeyJustPressed, resetInput, getMouse } from "./input.js";
 export type { Mouse } from "./input.js";
+export {
+    setupInput,
+    isKeyJustPressed,
+    resetInput, getMouse
+} from "./input.js";
 
 // Logging
 export { dlog } from "./logger.js";
 
 // Save System
-export { saveGame, loadGame, clearSave } from "./save.js";
+export {
+    saveGame,
+    loadGame,
+    clearSave
+} from "./save.js";
 
 // Texture Management
-export { drawTexture, getTexture, type Texture, loadTextureAsync } from "./texture.js";
+export type {
+    Texture,
+    TextureAtlas,
+    Animation,
+} from "./texture.js";
+export {
+    loadTextureAsync,
+    getTexture,
+    drawTexture,
+    loadAtlas,
+    drawAtlasFrame,
+    AnimationPlayer,
+    drawAnimation,
+    getFlipFromDirection,
+} from "./texture.js";
 
 // HTML Generation
-export { createCanvas, enableFullscreen, setupFullscreenButton } from "./html.js";
+export {
+    createCanvas,
+    enableFullscreen,
+    setupFullscreenButton
+} from "./html.js";
 
 // Keys Reference
 export { Key } from "./keys.js";

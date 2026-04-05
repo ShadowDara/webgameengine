@@ -2,7 +2,7 @@
 
 import { build as esbuild } from "esbuild";
 import { createServer } from "http";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile, mkdir } from "fs/promises";
 import { watch } from "fs";
 import path from "path";
 import { WebSocketServer } from "ws";
@@ -166,6 +166,8 @@ function createCLIApp(args: ReturnType<typeof parseArgs>, config: any) {
 
     // ================= WATCH =================
     function startWatcher() {
+        mkdir("resources", { recursive: true });
+        mkdir("game", { recursive: true });
         ["resources", "game"].forEach((dir) => {
             watch(dir, { recursive: true }, async () => {
                 flog(`📁 Change noticed in ${dir}`);

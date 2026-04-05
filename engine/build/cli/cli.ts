@@ -12,6 +12,7 @@ import { copyFolder, flog, getContentType } from "../buildhelper.js";
 import { GetDefaultHTML } from "../exporthtml.js";
 import { loadUserConfig } from "./config.js";
 
+
 // ================= ARG PARSING =================
 function parseArgs() {
     const args = process.argv.slice(2);
@@ -20,7 +21,6 @@ function parseArgs() {
         release: false,
         port: 3000,
         newProject: null as string | null,
-        // Empty Project
         empty: false,
     };
 
@@ -44,147 +44,163 @@ function parseArgs() {
                 options.newProject = args[i + 1];
                 i++;
                 break;
-            
+
             case "--new-empty":
                 options.empty = true;
-                i++;
                 break;
+            
+            case "-h":
+            case "--help":
+                // TODO
+                // make the help Message here
+                console.log("Cli Tools for Webgameengine");
 
             default:
-                console.warn(`⚠️ Unbekanntes Argument: ${arg}`);
+                console.warn(`⚠️ Unknown Argument: ${arg}`);
         }
     }
 
     return options;
 }
 
+// ================= APP FACTORY =================
+function createCLIApp(args: ReturnType<typeof parseArgs>, config: any) {
+    const isRelease = args.release;
+    const isDev = !isRelease;
+
+    // 👉 State kapseln statt global
+    let isBuilding = false;
+    let restarting = false;
+    let pendingRestart = false;
+    const sockets = new Set<any>();
+
+    // ================= BUILD =================
+    async function build() {
+        if (isBuilding) return;
+        isBuilding = true;
+
+        flog("🔄 Building new ...");
+
+        await esbuild({
+            entryPoints: [`./game/${config.entryname}`],
+            outdir: `./${config.outdir}`,
+            bundle: true,
+            platform: "browser",
+            minify: isRelease,
+            sourcemap: isDev,
+            define: {
+                "import.meta.env.DEV": JSON.stringify(isDev),
+            },
+        });
+
+        const html = GetDefaultHTML(config);
+        await writeFile("./dist/index.html", html);
+
+        await copyFolder("./resources", "./dist/resources");
+
+        flog("✅ Build finished!");
+        isBuilding = false;
+    }
+
+    // ================= SERVER =================
+    function startServer() {
+        const server = createServer(async (req, res) => {
+            const url = req.url || "/";
+            const filePath = url === "/" ? "/index.html" : url;
+
+            try {
+                const fullPath = path.join(process.cwd(), "dist", filePath);
+                const file = await readFile(fullPath);
+
+                res.writeHead(200, {
+                    "Content-Type": getContentType(filePath),
+                });
+                res.end(file);
+            } catch {
+                res.writeHead(404);
+                res.end("Not Found");
+            }
+        });
+
+        const wss = new WebSocketServer({ server });
+
+        wss.on("connection", (ws) => {
+            sockets.add(ws);
+            ws.on("close", () => sockets.delete(ws));
+        });
+
+        server.listen(args.port, () => {
+            flog(`🚀 Dev Server is running on http://localhost:${args.port}`);
+        });
+
+        return server;
+    }
+
+    // ================= RELOAD =================
+    function reloadClients() {
+        flog("🔄 Browser reload...");
+        for (const ws of sockets) {
+            ws.send("reload");
+        }
+    }
+
+    // ================= RESTART =================
+    async function restart() {
+        if (restarting) {
+            pendingRestart = true;
+            return;
+        }
+
+        restarting = true;
+
+        do {
+            pendingRestart = false;
+
+            flog("♻️ Restart...");
+            await build();
+            reloadClients();
+        } while (pendingRestart);
+
+        restarting = false;
+    }
+
+    // ================= WATCH =================
+    function startWatcher() {
+        ["resources", "game"].forEach((dir) => {
+            watch(dir, { recursive: true }, async () => {
+                flog(`📁 Change noticed in ${dir}`);
+                await restart();
+            });
+        });
+
+        flog("👀 Watcher active ...");
+    }
+
+    // ================= RUN =================
+    async function run() {
+        await build();
+
+        if (isDev) {
+            startServer();
+            startWatcher();
+        }
+
+        flog(`Build finished! Mode: ${isRelease ? "Release" : "Dev"}`);
+    }
+
+    return { run };
+}
+
+// ================= MAIN =================
 const args = parseArgs();
 
-// Falls --new → sofort ausführen und beenden
+// Create a bew Project
 if (args.newProject) {
     await createProject(args.newProject, args.empty);
-    // and make exit afterwards
+    process.exit(0);
 }
 
-// ================= FLAGS =================
-const isRelease = args.release;
-const isDev = !isRelease;
-
-// ================= CONFIG =================
 const config = await loadUserConfig();
 
-// ================= BUILD =================
-let isBuilding = false;
-
-async function build() {
-    if (isBuilding) return;
-    isBuilding = true;
-
-    flog("🔄 Baue neu...");
-
-    await esbuild({
-        entryPoints: [`./game/${config.entryname}`],
-        outdir: `./${config.outdir}`,
-        bundle: true,
-        platform: "browser",
-        minify: isRelease,
-        sourcemap: isDev,
-        define: {
-            "import.meta.env.DEV": JSON.stringify(isDev),
-        },
-    });
-
-    const html = GetDefaultHTML(config);
-    await writeFile("./dist/index.html", html);
-
-    await copyFolder("./resources", "./dist/resources");
-
-    flog("✅ Build fertig!");
-    isBuilding = false;
-}
-
-// ================= SERVER =================
-let sockets = new Set<any>();
-
-function startServer() {
-    const server = createServer(async (req, res) => {
-        const url = req.url || "/";
-        const filePath = url === "/" ? "/index.html" : url;
-
-        try {
-            const fullPath = path.join(process.cwd(), "dist", filePath);
-            const file = await readFile(fullPath);
-
-            res.writeHead(200, {
-                "Content-Type": getContentType(filePath),
-            });
-            res.end(file);
-        } catch {
-            res.writeHead(404);
-            res.end("Not Found");
-        }
-    });
-
-    const wss = new WebSocketServer({ server });
-
-    wss.on("connection", (ws) => {
-        sockets.add(ws);
-        ws.on("close", () => sockets.delete(ws));
-    });
-
-    server.listen(args.port, () => {
-        flog(`🚀 Dev Server läuft auf http://localhost:${args.port}`);
-    });
-
-    return server;
-}
-
-// ================= RELOAD =================
-function reloadClients() {
-    flog("🔄 Browser reload...");
-    for (const ws of sockets) {
-        ws.send("reload");
-    }
-}
-
-// ================= WATCH =================
-let restarting = false;
-let pendingRestart = false;
-
-async function restart() {
-    if (restarting) {
-        pendingRestart = true;
-        return;
-    }
-
-    restarting = true;
-
-    do {
-        pendingRestart = false;
-
-        flog("♻️ Restart...");
-        await build();
-        reloadClients();
-
-    } while (pendingRestart);
-
-    restarting = false;
-}
-
-// ================= START =================
-await build();
-
-if (isDev) {
-    startServer();
-
-    ["resources", "game"].forEach((dir) => {
-        watch(dir, { recursive: true }, async () => {
-            flog(`📁 Änderung erkannt in ${dir}`);
-            await restart();
-        });
-    });
-
-    flog("👀 Watcher aktiv...");
-}
-
-flog(`Build fertig! Modus: ${isRelease ? "Release" : "Dev"}`);
+const app = createCLIApp(args, config);
+await app.run();

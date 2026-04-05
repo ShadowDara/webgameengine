@@ -9,6 +9,32 @@ export type Vector3d = {
     z: number;
 };
 
+// Function to add 2 Vectors together
+export function add3d(vector1: Vector3d, vector2: Vector3d): Vector3d {
+    return {
+        x: vector1.x + vector2.x,
+        y: vector1.y + vector2.y,
+        z: vector1.z + vector2.z,
+    }
+}
+
+// Function to subtract 2 Vectors from each other
+export function subtract3d(vector1: Vector3d, vector2: Vector3d): Vector3d {
+    return {
+        x: vector1.x - vector2.x,
+        y: vector1.y - vector2.y,
+        z: vector1.z - vector2.z,
+    }
+}
+
+// Function to get the length from an Vector
+export function length3d(vector: Vector3d): number {
+    let produkt = vector.x * vector.x + vector.y * vector.y + vector.z * vector.z;
+    let root = Math.sqrt(produkt);
+
+    return root;
+}
+
 // Function to normalize a Vector 2d
 export function normalize3d(vector: Vector3d): Vector3d {
     // Check if the Vector is zero because then you dont need to
@@ -17,8 +43,7 @@ export function normalize3d(vector: Vector3d): Vector3d {
         return vector;
     }
 
-    let produkt = vector.x * vector.x + vector.y * vector.y + vector.z * vector.z;
-    let root = Math.sqrt(produkt);
+    let root = length3d(vector)
     
     vector.x = vector.x / root;
     vector.y = vector.y / root;
@@ -27,8 +52,26 @@ export function normalize3d(vector: Vector3d): Vector3d {
     return vector;
 }
 
-// TODO
-// ADD CROSS PRODUKT
+// Function to make scalar produkt from an Vector
+export function dot3d(v1: Vector3d, v2: Vector3d): number {
+    return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
+}
+
+// Function to calculate the cross produkt
+export function crossprodukt3d(v1: Vector3d, v2: Vector3d): Vector3d {
+    return {
+        x: (v1.y * v2.z - v1.z * v2.y),
+        y: (v1.z * v2.x - v1.x * v2.z),
+        z: (v1.x * v2.y - v1.y * v2.x),
+    }
+}
+
+// Calculate the Distance between 2 Vectors
+export function distance3d(v1: Vector3d, v2: Vector3d): number {
+    let tmp: Vector3d = subtract3d(v1, v2);
+    return length3d(tmp);
+}
+
 
 // Function to clamp a Vector 3d
 export function clamp3d(vector: Vector3d, min: Vector3d, max: Vector3d): Vector3d {

@@ -17,7 +17,13 @@ export {
 // Vector 3D
 export {
     type Vector3d,
+    add3d,
+    subtract3d,
+    length3d,
     normalize3d,
+    dot3d,
+    crossprodukt3d,
+    distance3d,
     clamp3d,
     lerp3d,
     map3d

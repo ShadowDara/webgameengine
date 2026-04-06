@@ -199,6 +199,8 @@ export default function defineConfig(): buildconfig {
   },
 
 Run "npm run dev" to start the Dev Server and play a little Snake Clone
+
+Add ".webgameengine" to your gitignore file if you are using Git.
 `);
 
     process.exit(0);

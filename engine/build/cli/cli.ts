@@ -46,6 +46,10 @@ function createBuilder(config: any, isRelease: boolean, isSingleFile: boolean = 
             if (isRelease) html = await compressHTML(html);
             
             await writeFile("./dist/index.html", html);
+
+            // Delete the JS File
+            await rm("./dist/main.js", { recursive: true, force: true });
+
             flog("✅ Single-file export created!");
         } else {
             // Multi-file export (original behavior)

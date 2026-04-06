@@ -21,43 +21,47 @@ function createBuilder(config: any, isRelease: boolean, isSingleFile: boolean = 
     mkdir("game", { recursive: true });
 
     async function build() {
-        flog("🔄 Building project...");
-        if (isRelease) await rm("./dist", { recursive: true, force: true });
+        try {
+            flog("🔄 Building project...");
+            if (isRelease) await rm("./dist", { recursive: true, force: true });
 
-        await esbuild({
-            entryPoints: [`./game/${config.entryname}`],
-            outdir: `./${config.outdir}`,
-            bundle: true,
-            platform: "browser",
-            minify: isRelease,
-            sourcemap: !isRelease,
-            define: { "import.meta.env.DEV": JSON.stringify(!isRelease) },
-        });
+            await esbuild({
+                entryPoints: [`./game/${config.entryname}`],
+                outdir: `./${config.outdir}`,
+                bundle: true,
+                platform: "browser",
+                minify: isRelease,
+                sourcemap: !isRelease,
+                define: { "import.meta.env.DEV": JSON.stringify(!isRelease) },
+            });
 
-        if (isSingleFile) {
-            // Single-file export
-            const bundledJsPath = path.join(".", config.outdir, `${config.entryname.replace(/\.[^.]*$/, "")}.js`);
-            const bundledJsContent = await readFile(bundledJsPath, "utf-8");
-            
-            // Scan resources and convert to data URIs
-            const resourcesMap = await scanResourcesAsDataURIs("./resources");
-            
-            let html = GetSingleFileHTML(config, bundledJsContent, resourcesMap);
-            if (isRelease) html = await compressHTML(html);
-            
-            await writeFile("./dist/index.html", html);
+            if (isSingleFile) {
+                // Single-file export
+                const bundledJsPath = path.join(".", config.outdir, `${config.entryname.replace(/\.[^.]*$/, "")}.js`);
+                const bundledJsContent = await readFile(bundledJsPath, "utf-8");
+                
+                // Scan resources and convert to data URIs
+                const resourcesMap = await scanResourcesAsDataURIs("./resources");
+                
+                let html = GetSingleFileHTML(config, bundledJsContent, resourcesMap);
+                if (isRelease) html = await compressHTML(html);
+                
+                await writeFile("./dist/index.html", html);
 
-            // Delete the JS File
-            await rm("./dist/main.js", { recursive: true, force: true });
+                // Delete the JS File
+                await rm("./dist/main.js", { recursive: true, force: true });
 
-            flog("✅ Single-file export created!");
-        } else {
-            // Multi-file export (original behavior)
-            let html = GetDefaultHTML(config);
-            if (isRelease) html = await compressHTML(html);
-            await writeFile("./dist/index.html", html);
-            await copyFolder("./resources", "./dist/resources");
-            flog("✅ Build finished!");
+                flog("✅ Single-file export created!");
+            } else {
+                // Multi-file export (original behavior)
+                let html = GetDefaultHTML(config);
+                if (isRelease) html = await compressHTML(html);
+                await writeFile("./dist/index.html", html);
+                await copyFolder("./resources", "./dist/resources");
+                flog("✅ Build finished!");
+            }
+        } catch (error) {
+            flog(`❌ Build failed: ${error instanceof Error ? error.message : String(error)}`);
         }
     }
 
@@ -134,14 +138,22 @@ async function main() {
 
         do {
             pendingRestart = false;
-            await builder.build();
-            devServer?.reloadClients();
+            try {
+                await builder.build();
+                devServer?.reloadClients();
+            } catch (error) {
+                flog(`❌ Rebuild failed: ${error instanceof Error ? error.message : String(error)}`);
+            }
         } while (pendingRestart);
 
         isBuilding = false;
     }
 
-    await builder.build();
+    try {
+        await builder.build();
+    } catch (error) {
+        flog(`❌ Initial build failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
 
     let devServer: ReturnType<typeof createDevServer> | null = null;
 

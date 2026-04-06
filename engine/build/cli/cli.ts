@@ -106,7 +106,7 @@ function createCLIApp(args: ReturnType<typeof parseArgs>, config: any) {
             ? compressHTML(html)
             : html;
 
-        await writeFile("./dist/index.html", html);
+        await writeFile("./dist/index.html", finalHTML);
 
         await copyFolder("./resources", "./dist/resources");
 

@@ -1,25 +1,41 @@
-import "esbuild-register";
+import { build } from "esbuild";
 import path from "path";
 import { pathToFileURL } from "url";
-import { buildconfig } from "../buildconfig.js";
+import fs from "fs/promises";
 
-export async function loadUserConfig(): Promise<buildconfig> {
-    const configPath = path.resolve(process.cwd(), "webgameengine.config.ts");
+export async function loadUserConfig() {
+    const root = process.cwd();
+
+    const configPath = path.resolve(root, "webgameengine.config.ts");
+    const outDir = path.resolve(root, ".webgameengine");
+    const outfile = path.join(outDir, "config.mjs");
 
     try {
-        const configUrl = pathToFileURL(configPath).href;
-        const mod = await import(configUrl);
+        // ensure folder exists
+        await fs.mkdir(outDir, { recursive: true });
+
+        // 🔥 bundle TS → JS
+        await build({
+            entryPoints: [configPath],
+            outfile,
+            bundle: true,
+            platform: "node",
+            format: "esm",
+        });
+
+        // 🔥 import compiled file
+        const mod = await import(pathToFileURL(outfile).href + `?t=${Date.now()}`);
 
         const config =
             typeof mod.default === "function"
-                ? mod.default()
+                ? await mod.default()
                 : mod.default;
 
         return config;
     } catch (e) {
         console.error(e);
         throw new Error(
-            "❌ Could not find 'webgameengine.config.ts - PATH: " + configPath
+            "❌ Could not load webgameengine.config.ts: " + configPath
         );
     }
 }

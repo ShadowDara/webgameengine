@@ -5,14 +5,12 @@ import { flog } from "../buildhelper.js";
 
 // ================= NEW PROJECT =================
 export async function createProject(name: string, empty: boolean) {
-    const base = path.resolve(name);
-
     flog(`📦 Erstelle neues Projekt: ${name}`);
 
-    await mkdir(base, { recursive: true });
-    await mkdir(path.join(base, "game"), { recursive: true });
-    await mkdir(path.join(base, "resources"), { recursive: true });
-    await mkdir(path.join(base, "dist"), { recursive: true });
+    // Create Dirs
+    await mkdir("game", { recursive: true });
+    await mkdir("resources", { recursive: true });
+    await mkdir("dist", { recursive: true });
 
     let content = `
 // A empty Project with the Web Framework
@@ -154,11 +152,11 @@ startEngine(() => { gameStart().then(() => {/* ready */}) }, gameLoop);
 
     // Basic game entry
     await writeFile(
-        path.join(base, "game", "main.ts"), content);
+        path.join("game", "main.ts"), content);
 
     // Config
     await writeFile(
-        path.join(base, "webgameengine.config.js"),
+        path.join("webgameengine.config.ts"),
 `
 // Project File for the Game
 

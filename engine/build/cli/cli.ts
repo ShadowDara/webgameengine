@@ -46,6 +46,10 @@ function createBuilder(config: any, isRelease: boolean, isSingleFile: boolean = 
                 let html = GetSingleFileHTML(config, bundledJsContent, resourcesMap);
                 if (isRelease) html = await compressHTML(html);
                 
+                // Add comment at the beginning after minification
+                const htmlComment = `<!-- Game made with WebGameEngine v${config.version} - https://github.com/Shadowdara/webgameengine -->\n`;
+                html = htmlComment + html;
+                
                 await writeFile("./dist/index.html", html);
 
                 // Delete the JS File
@@ -56,7 +60,20 @@ function createBuilder(config: any, isRelease: boolean, isSingleFile: boolean = 
                 // Multi-file export (original behavior)
                 let html = GetDefaultHTML(config);
                 if (isRelease) html = await compressHTML(html);
+                
+                // Add HTML comment at the beginning after minification
+                const htmlComment = `<!-- Game made with WebGameEngine v${config.version} - https://www.npmjs.com/@shadowdara/webgameengine -->\n`;
+                html = htmlComment + html;
+                
                 await writeFile("./dist/index.html", html);
+                
+                // Add JS comment at the beginning of JS files
+                const jsComment = `// Game made with WebGameEngine v${config.version} - https://www.npmjs.com/@shadowdara/webgameengine\n`;
+                const jsPath = path.join(".", config.outdir, `${config.entryname.replace(/\.[^.]*$/, "")}.js`);
+                let jsContent = await readFile(jsPath, "utf-8");
+                jsContent = jsComment + jsContent;
+                await writeFile(jsPath, jsContent);
+                
                 await copyFolder("./resources", "./dist/resources");
                 flog("✅ Build finished!");
             }

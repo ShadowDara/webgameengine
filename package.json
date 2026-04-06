@@ -18,7 +18,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./build": "./dist/build/index.js",
-    "./types": "./dist/types/index.js"
+    "./types": "./dist/types/index.js",
+    "./sound": "./dist/sound/index.js"
   },
   "keywords": [
     "game",

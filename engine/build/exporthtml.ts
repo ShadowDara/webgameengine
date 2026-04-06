@@ -49,13 +49,74 @@ export function GetDefaultHTML(config: buildconfig): string {
       body {
         overflow: hidden; /* 🔥 verhindert Scrollbars */
       }
+body {
+    margin: 0;
+    background: #0f172a;
+    color: white;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#startscreen {
+    text-align: center;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    font-weight: normal;
+    opacity: 0.7;
+}
+
+.startbutton {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background: #22c55e;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.startbutton:hover {
+    background: #16a34a;
+}
 ${fullscreenbutton}
 </style>
     </style>
   </head>
   <body>
+  <div id="startscreen">
+        <h2>WebGameEngine</h2>
+        <h1>${config.title}</h1>
+        <p>${config.version}</p>
+
+        <button class="startbutton" id="startBtn">Start</button>
+    </div>
+
+    <script type="module">
+        const btn = document.getElementById("startBtn");
+
+        btn.addEventListener("click", async () => {
+            // 🔊 Audio freischalten
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const ctx = new AudioContext();
+            await ctx.resume();
+
+            // Startscreen entfernen
+            document.getElementById("startscreen").remove();
+
+            // Game laden
+            import("./${config.entryname}");
+        });
+    </script>
     ${fullscreenBtn}
-    <script type="module" src="${config.entryname}.js"></script>
   </body>
 </html>
 `;

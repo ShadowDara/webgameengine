@@ -99,12 +99,12 @@ function createCLIApp(args: ReturnType<typeof parseArgs>, config: any) {
             },
         });
 
-        const html = GetDefaultHTML(config);
+        let html = GetDefaultHTML(config);
 
-        // // Compress the HTML in Release Mode
-        // const finalHTML = isRelease
-        //     ? compressHTML(html)
-        //     : html;
+        // Compress the HTML in Release Mode
+        if (isRelease) {
+            html = await compressHTML(html);
+        }
 
         await writeFile("./dist/index.html", html);
 

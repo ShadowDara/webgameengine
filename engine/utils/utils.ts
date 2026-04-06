@@ -1,10 +1,13 @@
+import { minify } from "html-minifier-terser";
+
 // Function to compress HTML
-export function compressHTML(html: string): string {
-    console.log("This is a broken function! Dont use it!");
-    return html;
-    return html
-        .replace(/<!--[\s\S]*?-->/g, "")
-        .replace(/>\s+</g, "><")
-        .replace(/\n/g, "")
-        .trim();
+export async function compressHTML(html: string) {
+    return await minify(html, {
+        collapseWhitespace: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        removeEmptyAttributes: true,
+        minifyCSS: true,
+        minifyJS: true,
+    });
 }

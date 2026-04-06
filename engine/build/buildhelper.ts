@@ -1,4 +1,4 @@
-import { readdirSync, statSync, mkdirSync, promises as fsPromises } from "fs";
+import { readdirSync, statSync, mkdirSync, promises as fsPromises, existsSync } from "fs";
 import { join } from "path";
 
 export const flog = (...args: any[]) => {
@@ -32,6 +32,36 @@ export async function copyFolder(src: string, dest: string) {
     }
 }
 
+// Scan resources folder and convert to data URIs (base64)
+export async function scanResourcesAsDataURIs(resourceDir: string): Promise<Record<string, string>> {
+    const resourceMap: Record<string, string> = {};
+    
+    if (!existsSync(resourceDir)) {
+        return resourceMap;
+    }
+
+    async function scanDir(dir: string, basePath: string = "") {
+        const entries = readdirSync(dir, { withFileTypes: true });
+
+        for (const entry of entries) {
+            const fullPath = join(dir, entry.name);
+            const resourcePath = basePath ? `${basePath}/${entry.name}` : entry.name;
+
+            if (entry.isDirectory()) {
+                await scanDir(fullPath, resourcePath);
+            } else if (entry.isFile()) {
+                const fileData = await fsPromises.readFile(fullPath);
+                const base64Data = fileData.toString("base64");
+                const mimeType = getMimeType(entry.name);
+                resourceMap[resourcePath] = `data:${mimeType};base64,${base64Data}`;
+            }
+        }
+    }
+
+    await scanDir(resourceDir);
+    return resourceMap;
+}
+
 // === Helper ===
 export function getContentType(path: string) {
     if (path.endsWith(".js")) return "application/javascript";
@@ -40,4 +70,24 @@ export function getContentType(path: string) {
     if (path.endsWith(".css")) return "text/css";
     if (path.endsWith(".png")) return "image/png";
     return "text/plain";
+}
+
+export function getMimeType(filename: string): string {
+    const ext = filename.toLowerCase().split(".").pop() || "";
+    const mimeTypes: Record<string, string> = {
+        "png": "image/png",
+        "jpg": "image/jpeg",
+        "jpeg": "image/jpeg",
+        "gif": "image/gif",
+        "svg": "image/svg+xml",
+        "webp": "image/webp",
+        "mp3": "audio/mpeg",
+        "wav": "audio/wav",
+        "ogg": "audio/ogg",
+        "m4a": "audio/mp4",
+        "json": "application/json",
+        "txt": "text/plain",
+        "css": "text/css",
+    };
+    return mimeTypes[ext] || "application/octet-stream";
 }

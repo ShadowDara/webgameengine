@@ -8,14 +8,14 @@ import path from "path";
 import { WebSocket, WebSocketServer } from "ws";
 
 import { createProject } from "./new.js";
-import { copyFolder, flog, getContentType } from "../buildhelper.js";
-import { GetDefaultHTML } from "../exporthtml.js";
+import { copyFolder, flog, getContentType, scanResourcesAsDataURIs } from "../buildhelper.js";
+import { GetDefaultHTML, GetSingleFileHTML } from "../exporthtml.js";
 import { loadUserConfig } from "./config.js";
 import { compressHTML } from "../../utils/utils.js";
 import { type CLIArgs, parseArgs } from "./argparser.js";
 
 // ================= BUILD =================
-function createBuilder(config: any, isRelease: boolean) {
+function createBuilder(config: any, isRelease: boolean, isSingleFile: boolean = false) {
     async function build() {
         flog("🔄 Building project...");
         if (isRelease) await rm("./dist", { recursive: true, force: true });
@@ -30,11 +30,27 @@ function createBuilder(config: any, isRelease: boolean) {
             define: { "import.meta.env.DEV": JSON.stringify(!isRelease) },
         });
 
-        let html = GetDefaultHTML(config);
-        if (isRelease) html = await compressHTML(html);
-        await writeFile("./dist/index.html", html);
-        await copyFolder("./resources", "./dist/resources");
-        flog("✅ Build finished!");
+        if (isSingleFile) {
+            // Single-file export
+            const bundledJsPath = path.join(".", config.outdir, `${config.entryname.replace(/\.[^.]*$/, "")}.js`);
+            const bundledJsContent = await readFile(bundledJsPath, "utf-8");
+            
+            // Scan resources and convert to data URIs
+            const resourcesMap = await scanResourcesAsDataURIs("./resources");
+            
+            let html = GetSingleFileHTML(config, bundledJsContent, resourcesMap);
+            if (isRelease) html = await compressHTML(html);
+            
+            await writeFile("./dist/index.html", html);
+            flog("✅ Single-file export created!");
+        } else {
+            // Multi-file export (original behavior)
+            let html = GetDefaultHTML(config);
+            if (isRelease) html = await compressHTML(html);
+            await writeFile("./dist/index.html", html);
+            await copyFolder("./resources", "./dist/resources");
+            flog("✅ Build finished!");
+        }
     }
 
     return { build };
@@ -96,7 +112,7 @@ async function main() {
     }
 
     const config = await loadUserConfig();
-    const builder = createBuilder(config, args.release);
+    const builder = createBuilder(config, args.release, args.singlefile);
 
     let isBuilding = false;
     let pendingRestart = false;

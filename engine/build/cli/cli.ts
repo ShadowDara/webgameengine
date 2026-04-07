@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// Build Cli Tools for webgameengine
+
 import { build as esbuild } from "esbuild";
 import { createServer } from "http";
 import { readFile, writeFile, mkdir, rm } from "fs/promises";

@@ -1,6 +1,7 @@
 # WebGameEngine 🎮
 
-A lightweight, TypeScript-first web game engine framework for building 2D games *and maybe 3D Games in the Future*.
+A lightweight, TypeScript-first web game engine framework for building
+2D games *and maybe 3D Games in the Future*.
 
 ## Features
 
@@ -14,7 +15,7 @@ A lightweight, TypeScript-first web game engine framework for building 2D games 
 
 ## Quick Start
 
-```bash
+```sh
 npm init
 npm install @shadowdara/webgameengine
 npx webgameengine --new
@@ -24,12 +25,14 @@ npx webgameengine
 ### Basic Game Loop
 
 ```typescript
-import { startEngine, setupInput, dlog, renderText } from '@shadowdara/webgameengine';
+import { startEngine, setupInput, dlog, renderText
+} from '@shadowdara/webgameengine';
 
-const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
-const ctx = canvas.getContext('2d')!;
+const { canvas, ctx, applyScaling, virtualWidth, virtualHeight
 
-setupInput(canvas, 800, 600);
+} = createCanvas({ fullscreen: true, scaling: "fit",
+virtualWidth: 1920, virtualHeight: 1080 });
+setupInput(canvas, virtualWidth, virtualHeight);
 
 function init() {
   dlog('🎮 Game initialized!');
@@ -51,10 +54,11 @@ startEngine(init, gameLoop);
 
 ### Using Bun (local development)
 
-```bash
+```sh
 npx webgameengine                   # Start Dev Server
 npx webgameengine --release         # Production build
-npx webgameengine --new             # Create a new project with a simple Snake Clone as Template
+npx webgameengine --new             # Create a new project with a
+                                    # simple Snake Clone as Template
 npx webgameengine --new-empty       # Create a new empty project
 ```
 
@@ -79,7 +83,8 @@ or
 ```typescript
 // Project File for the Game
 
-import { type buildconfig, new_buildconfig } from "@shadowdara/webgameengine/build";
+import { type buildconfig, new_buildconfig
+} from "@shadowdara/webgameengine/build";
 
 export function defineConfig(): buildconfig {
     let config: buildconfig = new_buildconfig();

@@ -133,7 +133,7 @@ async function init() {
 
     if (existsSync(PATH)) {
         console.log(`Config file already exists: ${PATH}`);
-        console.log("Overwriting");
+        return;
     }
 
     const projectname = await prompt("Projectname: ");

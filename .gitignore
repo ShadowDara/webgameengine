@@ -4,4 +4,4 @@ bun.lock
 
 *.tgz
 
-.webgameengine/
+**/.webgameengine/config.mjs

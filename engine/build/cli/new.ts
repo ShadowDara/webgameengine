@@ -1,5 +1,6 @@
 import path from "path";
 import { writeFile, mkdir } from "fs/promises";
+import chalk from 'chalk';
 
 import { flog } from "../buildhelper.js";
 
@@ -193,6 +194,7 @@ export default function defineConfig(): buildconfig {
     // flog(`👉 npm install`);
     // flog(`👉 npm run dev`);
     console.log(`Add to your package.json file:
+
   "scripts": {
     "dev": "npx webgameengine",
     "build": "npx webgameengine --release"
@@ -200,7 +202,10 @@ export default function defineConfig(): buildconfig {
 
 Run "npm run dev" to start the Dev Server and play a little Snake Clone
 
-Add ".webgameengine" to your gitignore file if you are using Git.
+Add ".webgameengine/config.mjs" to your gitignore file if you are using Git.
+
+${chalk.red("Dont ignore the complete Folder!")}
+${chalk.red("Some Tools by webgameengine are saving important configs in this Folder!")}
 `);
 
     process.exit(0);

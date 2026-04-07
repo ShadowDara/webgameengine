@@ -1,5 +1,5 @@
 {
-  "name": "@shadowdara/webgameengine",
+  "name": "samengine",
   "version": "1.5.2",
   "description": "A TypeScript game library to make HTML Games",
   "main": "dist/index.js",

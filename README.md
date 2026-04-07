@@ -134,7 +134,7 @@ MIT
 
 - [samengine-build](https://www.npmjs.com/package/samengine-build)
 - [samengine-cli](https://www.npmjs.com/package/samengine-cli)
-
+- [old deprecated npm package](https://www.npmjs.com/package/@shadowdara/webgameengine)
 <!--
 
 IDEAS

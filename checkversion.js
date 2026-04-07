@@ -1,3 +1,5 @@
+// Print the Version from a Version file in the Project
+
 import { version } from "@shadowdara/webgameengine/build"
 import chalk from 'chalk';
 

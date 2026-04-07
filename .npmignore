@@ -4,6 +4,7 @@ tools/
 game/
 resources/
 dist/**/*.map
+src/
 
 # Dev files
 *.test.ts

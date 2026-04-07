@@ -130,6 +130,11 @@ MIT
 
 *(I dont now why i added this)*
 
+## More Tools for samengine
+
+- [samengine-build](https://www.npmjs.com/package/samengine-build)
+- [samengine-cli](https://www.npmjs.com/package/samengine-cli)
+
 <!--
 
 IDEAS

@@ -6,8 +6,8 @@ import fs from "fs/promises";
 export async function loadUserConfig() {
     const root = process.cwd();
 
-    const configPath = path.resolve(root, "webgameengine.config.ts");
-    const outDir = path.resolve(root, ".webgameengine");
+    const configPath = path.resolve(root, "samengine.config.ts");
+    const outDir = path.resolve(root, ".samengine");
     const outfile = path.join(outDir, "config.mjs");
 
     try {

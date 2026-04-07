@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Build Cli Tools for webgameengine
+// Build Cli Tools for samengine
 
 import { build as esbuild } from "esbuild";
 import { createServer } from "http";
@@ -52,7 +52,7 @@ function createBuilder(config: any, isRelease: boolean, isSingleFile: boolean = 
                 if (isRelease) html = await compressHTML(html);
                 
                 // Add comment at the beginning after minification
-                const htmlComment = `<!-- Game made with WebGameEngine v${config.version} - https://github.com/Shadowdara/webgameengine -->\n`;
+                const htmlComment = `<!-- Game made with samengine v${config.version} - https://github.com/Shadowdara/samengine -->\n`;
                 html = htmlComment + html;
                 
                 await writeFile("./dist/index.html", html);
@@ -67,13 +67,13 @@ function createBuilder(config: any, isRelease: boolean, isSingleFile: boolean = 
                 if (isRelease) html = await compressHTML(html);
                 
                 // Add HTML comment at the beginning after minification
-                const htmlComment = `<!-- Game made with WebGameEngine v${config.version} - https://www.npmjs.com/@shadowdara/webgameengine -->\n`;
+                const htmlComment = `<!-- Game made with samengine v${config.version} - https://www.npmjs.com/@shadowdara/samengine -->\n`;
                 html = htmlComment + html;
                 
                 await writeFile("./dist/index.html", html);
                 
                 // Add JS comment at the beginning of JS files
-                const jsComment = `// Game made with WebGameEngine v${config.version} - https://www.npmjs.com/@shadowdara/webgameengine\n`;
+                const jsComment = `// Game made with samengine v${config.version} - https://www.npmjs.com/@shadowdara/samengine\n`;
                 const jsPath = path.join(".", config.outdir, `${config.entryname.replace(/\.[^.]*$/, "")}.js`);
                 let jsContent = await readFile(jsPath, "utf-8");
                 jsContent = jsComment + jsContent;

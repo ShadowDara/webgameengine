@@ -37,7 +37,7 @@ export function parseArgs(): CLIArgs {
                 break;
             case "-h":
             case "--help":
-                console.log("CLI Tools for Webgameengine\nUsage:\n  -r, --release\n  -p <port>\n  -n <project>\n  --new-empty\n --single-file   to generate the Export into one file");
+                console.log("CLI Tools for samengine\nUsage:\n  -r, --release\n  -p <port>\n  -n <project>\n  --new-empty\n --single-file   to generate the Export into one file");
                 process.exit(0);
             default:
                 console.warn(`⚠️ Unknown Argument: ${arg}`);

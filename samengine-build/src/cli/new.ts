@@ -16,9 +16,9 @@ export async function createProject(name: string, empty: boolean) {
     let content = `
 // A empty Project with the Web Framework
 
-import { createCanvas, enableFullscreen, setupFullscreenButton } from "@shadowdara/webgameengine";
-import { setupInput, resetInput, getMouse } from "@shadowdara/webgameengine";
-import { startEngine } from "@shadowdara/webgameengine";
+import { createCanvas, enableFullscreen, setupFullscreenButton } from "samengine";
+import { setupInput, resetInput, getMouse } from "samengine";
+import { startEngine } from "samengine";
 
 const { canvas, ctx, applyScaling } = createCanvas({fullscreen: true, scaling: "fit", virtualWidth: window.innerWidth, virtualHeight: window.innerHeight});
 setupInput(canvas);
@@ -50,13 +50,13 @@ startEngine(() => { gameStart().then(() => {/* ready */}) }, gameLoop);
         content =`
 // A mini Snake Clone with my Webframework
 
-import { createCanvas } from "@shadowdara/webgameengine";
-import { setupInput, isKeyJustPressed, resetInput } from "@shadowdara/webgameengine";
-import { startEngine } from "@shadowdara/webgameengine";
-import { renderText } from "@shadowdara/webgameengine";
-import { Vector2d } from "@shadowdara/webgameengine/types";
-import { dlog } from "@shadowdara/webgameengine";
-import { Key } from "@shadowdara/webgameengine";
+import { createCanvas } from "samengine";
+import { setupInput, isKeyJustPressed, resetInput } from "samengine";
+import { startEngine } from "samengine";
+import { renderText } from "samengine";
+import { Vector2d } from "samengine/types";
+import { dlog } from "samengine";
+import { Key } from "samengine";
 
 const { canvas, ctx } = createCanvas({fullscreen: true, scaling: "fit", virtualWidth: window.innerWidth, virtualHeight: window.innerHeight});
 setupInput(canvas);
@@ -157,12 +157,12 @@ startEngine(() => { gameStart().then(() => {/* ready */}) }, gameLoop);
 
     // Config
     await writeFile(
-        path.join("webgameengine.config.ts"),
+        path.join("samengine.config.ts"),
 `
 // Project File for the Game
 
-import type { buildconfig } from "@shadowdara/webgameengine/build";
-import { new_buildconfig } from "@shadowdara/webgameengine/build";
+import type { buildconfig } from "samengine-build";
+import { new_buildconfig } from "samengine-build";
 
 export default function defineConfig(): buildconfig {
     let config: buildconfig = new_buildconfig();
@@ -196,16 +196,16 @@ export default function defineConfig(): buildconfig {
     console.log(`Add to your package.json file:
 
   "scripts": {
-    "dev": "npx webgameengine",
-    "build": "npx webgameengine --release"
+    "dev": "npx samengine-build",
+    "build": "npx samengine-build --release"
   },
 
 Run "npm run dev" to start the Dev Server and play a little Snake Clone
 
-Add ".webgameengine/config.mjs" to your gitignore file if you are using Git.
+Add ".samengine/config.mjs" to your gitignore file if you are using Git.
 
 ${chalk.red("Dont ignore the complete Folder!")}
-${chalk.red("Some Tools by webgameengine are saving important configs in this Folder!")}
+${chalk.red("Some Tools by samengine are saving important configs in this Folder!")}
 `);
 
     process.exit(0);

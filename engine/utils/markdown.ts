@@ -750,6 +750,11 @@ ${body}
 </html>`;
 }
 
+// Function to export the CSS
+export function exportcss(): string {
+  return defaultCss;
+}
+
 // ---------------------------------------------------------------------------
 // CLI  (wird ausgeführt wenn die Datei direkt aufgerufen wird)
 // ---------------------------------------------------------------------------

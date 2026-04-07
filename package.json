@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "pack": "node clean.js && npm run build && npm pack && git push --follow-tags"
+    "pack": "node clean.js && npm run build && npm pack && git push --follow-tags",
+    "test": "bun test"
   },
   "bin": {
     "webgameengine": "dist/build/cli/cli.js"
@@ -41,5 +42,12 @@
     "html-minifier-terser": "^7.2.0",
     "mime": "^4.1.0",
     "ws": "^8.20.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shadowdara/webgameengine"
+  },
+  "bugs": {
+    "url": "https://github.com/shadowdara/webgameengine/issues"
   }
 }

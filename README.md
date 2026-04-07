@@ -67,7 +67,7 @@ import { defineConfig } from '@shadowdara/webgameengine/build';
 
 export function defineConfig() {
   return {
-    entryname: 'main.ts',
+    entryname: 'main',
     outdir: 'dist',
     // ... other config
   };
@@ -108,9 +108,25 @@ export function defineConfig(): buildconfig {
 - Math utilities for game logic
 
 ### Utilities
-- `dlog()` - Development logging
+<!-- - `dlog()` - Development logging -->
 - `startEngine()` - Manage game loop
 
 ## License
 
 MIT
+
+## More Addons in the Game Library
+
+- a Full Markdown Parser *(maybe for notes or easy docs, feel free to use)*
+- a JSON with Comments Parser
+
+*(I dont now why i added this)*
+
+<!--
+
+IDEAS
+
+- SVG Integration
+- SVG Generator
+
+-->

@@ -18,11 +18,6 @@
     "./utils": "./dist/utils/index.js",
     "./build": "./dist/build/index.js"
   },
-  "bin": {
-    "webgameengine": "dist/build/cli/cli.js",
-    "webgameengine-linksaver": "dist/build/clitools/linksaver.js",
-    "webgameengine-buildinfos": "dist/build/clitools/buildinfos.js"
-  },
   "keywords": [
     "game",
     "typescript"

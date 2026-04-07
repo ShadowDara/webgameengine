@@ -1,7 +1,7 @@
 // Function to create the Export HTML for the Build
 
 // Function to create the Export HTML for the Build
-import { version } from "./buildconfig.js";
+import { version } from "samengine/build";
 import type { buildconfig } from "./buildconfig.js";
 
 export function GetSingleFileHTML(config: buildconfig, bundledJsContent: string, resourcesMap: Record<string, string> = {}): string {

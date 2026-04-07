@@ -1,12 +1,21 @@
 {
   "name": "samengine-build",
   "version": "1.6.0",
-  "description": "",
+  "description": "The build and export Tool for samengine.",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsc",
     "pack": "node ../scripts/clean.js && npm run build && npm pack && git push --follow-tags && node ../scripts/checkversion.js"
   },
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./utils": "./dist/utils/index.js"
+  },
+  "bin": {
+    "samengine-build": "dist/cli/cli.js"
   },
   "author": "Shadowdara",
   "type": "module",
@@ -21,6 +30,15 @@
     "esbuild": "^0.28.0",
     "html-minifier-terser": "^7.2.0",
     "mime": "^4.1.0",
+    "samengine": "^1.6.0",
     "ws": "^8.20.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shadowdara/samengine"
+  },
+  "bugs": {
+    "url": "https://github.com/shadowdara/samengine/issues"
   }
 }

@@ -5,6 +5,15 @@ const textures: Record<string, HTMLImageElement> = {};
 
 export type Texture = HTMLImageElement | undefined;
 
+export type DrawOptions = {
+    width?: number;
+    height?: number;
+    rotation?: number;
+    flipX?: boolean;
+    flipY?: boolean;
+    scale?: number;
+};
+
 function getresourcepath(path: string): string {
     return "resources/" + path;
 }
@@ -57,13 +66,17 @@ export function drawTexture(
     texture: Texture,
     x: number,
     y: number,
-    width?: number,
-    height?: number,
-    rotation: number = 0,
-    flipX: boolean = false,
-    flipY: boolean = false,
-    scale: number = 1 // 🔹 NEU
+    options: DrawOptions = {}
 ): void {
+    const {
+        width,
+        height,
+        rotation = 0,
+        flipX = false,
+        flipY = false,
+        scale = 1
+    } = options;
+
     if (!texture) {
         dlog("Texture not found");
 
@@ -128,13 +141,17 @@ export function drawAtlasFrame(
     frameName: string,
     x: number,
     y: number,
-    width?: number,
-    height?: number,
-    rotation: number = 0,
-    flipX: boolean = false,
-    flipY: boolean = false,
-    scale: number = 1 // 🔹 NEU
+    options: DrawOptions = {}
 ) {
+    const {
+        width,
+        height,
+        rotation = 0,
+        flipX = false,
+        flipY = false,
+        scale = 1
+    } = options;
+
     const frame = atlas.frames[frameName];
 
     if (!frame) {
@@ -254,12 +271,7 @@ export function drawAnimation(
     player: AnimationPlayer,
     x: number,
     y: number,
-    width?: number,
-    height?: number,
-    rotation: number = 0,
-    flipX: boolean = false,
-    flipY: boolean = false,
-    scale: number = 1 // 🔹 NEU
+    options: DrawOptions = {}
 ) {
     const frame = player.getCurrentFrame();
 
@@ -269,12 +281,7 @@ export function drawAnimation(
         frame,
         x,
         y,
-        width,
-        height,
-        rotation,
-        flipX,
-        flipY,
-        scale
+        options
     );
 }
 

@@ -34,6 +34,7 @@ export {
 // Texture Management
 export type {
     Texture,
+    DrawOptions,
     TextureAtlas,
     Animation,
 } from "./texture.js";

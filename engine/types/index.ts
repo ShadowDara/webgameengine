@@ -73,8 +73,3 @@ export {
     isTriangleClicked,
     getTrianglePerimeter,
 } from "./triangle.js";
-
-// version
-export {
-    version
-} from "./version.js";

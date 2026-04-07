@@ -1,7 +1,5 @@
 // Utils Package
 
-import { validateHeaderValue } from "node:http";
-
 // Math Utilities
 export { clamp, lerp, map } from "./math.js";
 

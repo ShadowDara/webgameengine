@@ -46,7 +46,7 @@ window.__loadResource = function(path) {
     }
     return resource;
 };
-window.__webgameengine__ = {
+window.__samengine__ = {
     version: "${frameworkVersion}"
 };`;
 
@@ -55,7 +55,7 @@ window.__webgameengine__ = {
 ${bundledJsContent.split('\n').map(line => '  ' + line).join('\n')}
 }`;
 
-    const defaulthtml: string = `<!-- HTML Web Game made with webgameengine by Shadowdara -->
+    const defaulthtml: string = `<!-- HTML Web Game made with samengine by Shadowdara -->
 <!-- DO NOT REMOVE THIS NOTE ! -->    
 <!DOCTYPE html>
 <html>
@@ -117,7 +117,7 @@ ${fullscreenbutton}
   </head>
   <body>
   <div id="startscreen">
-        <h2>made with WebGameEngine</h2>
+        <h2>made with samengine</h2>
         <h1>${config.title}</h1>
         <p>${config.version}</p>
 
@@ -187,7 +187,7 @@ export function GetDefaultHTML(config: buildconfig): string {
 <button id="fullscreenBtn">⛶ Fullscreen</button>`;
     }
 
-    const defaulthtml: string = `<!-- HTML Web Game made with webgameengine by Shadowdara -->
+    const defaulthtml: string = `<!-- HTML Web Game made with samengine by Shadowdara -->
 <!-- DO NOT REMOVE THIS NOTE ! -->    
 <!DOCTYPE html>
 <html>
@@ -249,7 +249,7 @@ ${fullscreenbutton}
   </head>
   <body>
   <div id="startscreen">
-        <h2>made with WebGameEngine</h2>
+        <h2>made with samengine</h2>
         <h1>${config.title}</h1>
         <p>${config.version}</p>
 
@@ -276,7 +276,7 @@ ${fullscreenbutton}
             import("./${config.entryname}.js");
         });
 
-        window.__webgameengine__ = {
+        window.__samengine__ = {
             version: "${frameworkVersion}"
         };
     </script>

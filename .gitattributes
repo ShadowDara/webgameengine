@@ -1,1 +1,4 @@
+# Cli Tools should although be in TS
 engine/build/cli/cli.ts linguist-language=Typescript
+engine/build/clitools/buildinfos.ts linguist-language=Typescript
+engine/build/clitools/linksaver.ts linguist-language=Typescript

@@ -1,4 +1,4 @@
-# WebGameEngine 🎮
+# Samengine 🎮
 
 A lightweight, TypeScript-first web game engine framework for building
 2D games *and maybe 3D Games in the Future*.
@@ -16,17 +16,20 @@ A lightweight, TypeScript-first web game engine framework for building
 ## Quick Start
 
 ```sh
+# Make sure both of them have the same Version
+
 npm init
-npm install @shadowdara/webgameengine
-npx webgameengine --new
-npx webgameengine
+npm install samengine
+npm install samengine-build
+npx samengine-build --new
+npx samengine-build
 ```
 
 ### Basic Game Loop
 
 ```typescript
 import { startEngine, setupInput, dlog, renderText
-} from '@shadowdara/webgameengine';
+} from 'samengine';
 
 const { canvas, ctx, applyScaling, virtualWidth, virtualHeight
 
@@ -55,19 +58,19 @@ startEngine(init, gameLoop);
 ### Using Bun (local development)
 
 ```sh
-npx webgameengine                   # Start Dev Server
-npx webgameengine --release         # Production build
-npx webgameengine --new             # Create a new project with a
+npx samengine-build                   # Start Dev Server
+npx samengine-build --release         # Production build
+npx samengine-build --new             # Create a new project with a
                                     # simple Snake Clone as Template
-npx webgameengine --new-empty       # Create a new empty project
+npx samengine-build --new-empty       # Create a new empty project
 ```
 
 ### Configuration
 
-Edit `webgameengine.config.ts` to configure your game:
+Edit `samengine.config.ts` to configure your game:
 
 ```typescript
-import { defineConfig } from '@shadowdara/webgameengine/build';
+import { defineConfig } from 'samengine-build';
 
 export function defineConfig() {
   return {
@@ -84,7 +87,7 @@ or
 // Project File for the Game
 
 import { type buildconfig, new_buildconfig
-} from "@shadowdara/webgameengine/build";
+} from "samengine-build";
 
 export function defineConfig(): buildconfig {
     let config: buildconfig = new_buildconfig();

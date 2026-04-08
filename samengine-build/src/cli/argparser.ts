@@ -33,6 +33,7 @@ export function parseArgs(): CLIArgs {
                 options.newProject = args[++i];
                 break;
             case "--new-empty":
+                options.newProject = args[++i];
                 options.empty = true;
                 break;
             case "-h":

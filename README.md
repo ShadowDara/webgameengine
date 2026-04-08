@@ -58,11 +58,11 @@ startEngine(init, gameLoop);
 ### Using Bun (local development)
 
 ```sh
-npx samengine-build                   # Start Dev Server
-npx samengine-build --release         # Production build
-npx samengine-build --new             # Create a new project with a
-                                    # simple Snake Clone as Template
-npx samengine-build --new-empty       # Create a new empty project
+npx samengine-build                       # Start Dev Server
+npx samengine-build --release             # Production build
+npx samengine-build --new (newproject)    # Create a new project with a
+                                          # simple Snake Clone as Template
+npx samengine-build --new-empty (new)     # Create a new empty project
 ```
 
 ### Configuration

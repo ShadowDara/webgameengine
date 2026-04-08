@@ -10,15 +10,18 @@ import chalk from 'chalk';
 import { mkdir } from "fs/promises";
 
 const BASE_DIR = process.cwd();
-const PATH = join(BASE_DIR, ".webgameengine/", "linksaver.json");
+const PATH = join(BASE_DIR, ".samengine/", "linksaver.json");
 
 class ConfigError extends Error { }
 
 // Types
 export type Link = {
+    name?: string;
     link: string;
     description: string;
     license?: string;
+    author?: string;
+    licenselink?: string;
 };
 
 // Config
@@ -29,10 +32,23 @@ export type AppConfig = {
 };
 
 // Function to generate a new Link
-function newLink(link = "", description = "", license?: string): Link {
-    return license
-        ? { link, description, license }
-        : { link, description };
+function newLink(link = "", description = "", license?: string, name?: string, author?: string, licenselink?: string): Link {
+    const linkObj: Link = { link, description };
+
+    if (license) {
+        linkObj.license = license;
+    }
+    if (name) {
+        linkObj.name = name;
+    }
+    if (author) {
+        linkObj.author = author;
+    }
+    if (licenselink) {
+        linkObj.licenselink = licenselink;
+    }
+
+    return linkObj;
 }
 
 function newAppConfig(projectname = ""): AppConfig {
@@ -101,6 +117,15 @@ function loadConfig(path: string): AppConfig {
             if (typeof item.license === "string") {
                 linkObj.license = item.license;
             }
+            if (typeof item.name === "string") {
+                linkObj.name = item.name;
+            }
+            if (typeof item.author === "string") {
+                linkObj.author = item.author;
+            }
+            if (typeof item.licenselink === "string") {
+                linkObj.licenselink = item.licenselink;
+            }
 
             return linkObj;
         });
@@ -156,19 +181,39 @@ async function init() {
 }
 
 async function addLink(config: AppConfig) {
+    const newName = await prompt("Name (optional): ");
     const newLinkVal = await prompt("New Link: ");
     const newDesc = await prompt("New Description: ");
-    const newLic = await prompt("License: ");
+    const newAuthor = await prompt("Author (optional): ");
+    const newLic = await prompt("License (optional): ");
+    const newLicenseLink = await prompt("License Link (optional): ");
 
-    config.links.push(newLink(newLinkVal, newDesc, newLic));
+    config.links.push(newLink(newLinkVal, newDesc, newLic, newName, newAuthor, newLicenseLink));
     console.log("Added new Link!");
 
     saveConfig(config);
 }
 
-function viewLinks(config: AppConfig) {
+function viewLinks(config: AppConfig): void {
     for (const link of config.links) {
-        console.log(`[${chalk.green(link.link)}] - ${link.description} - [${chalk.red(link.license)}]`);
+        const parts = [
+            `[${chalk.green(link.link)}]`,
+            link.name ? `Name: ${link.name}` : null,
+            `Desc: ${link.description}`,
+            link.author ? `Author: ${link.author}` : null,
+            link.license ? `License: ${chalk.red(link.license)}` : null,
+            link.licenselink ? `License URL: ${link.licenselink}` : null,
+        ].filter(Boolean);
+
+        console.log(parts.join(" | "));
+    }
+}
+
+function listLinks(config: AppConfig): void {
+    for (const link of config.links) {
+        let part = `"${link.name}" (${link.link}) by ${link.author} is licensed under ${link.license} (${link.licenselink})\n`;
+
+        console.log(part);
     }
 }
 
@@ -247,6 +292,11 @@ async function main() {
 
         if (args[0] === "view") {
             viewLinks(config);
+            return;
+        }
+
+        if (args[0] === "list") {
+            listLinks(config);
             return;
         }
 

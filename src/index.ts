@@ -17,8 +17,11 @@ export {
 export type { Mouse } from "./input.js";
 export {
     setupInput,
+    isKeyPressed,
     isKeyJustPressed,
-    resetInput, getMouse
+    isKeyJustReleased,
+    resetInput,
+    getMouse
 } from "./input.js";
 
 // Logging

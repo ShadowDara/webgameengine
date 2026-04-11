@@ -1,4 +1,4 @@
 // Function to get the Version
 export function version(): string {
-    return "1.7.0";
+    return "1.7.1";
 }

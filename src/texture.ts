@@ -15,7 +15,7 @@ export type DrawOptions = {
 };
 
 function getresourcepath(path: string): string {
-    return "resources/" + path;
+    return "/resources/" + path;
 }
 
 // Function to load a Texture Async
@@ -29,14 +29,13 @@ export function loadTextureAsync(src: string): Promise<HTMLImageElement> {
 
         // 🔹 Hier Pfad modifizieren, z.B. Prefix hinzufügen
         let finalSrc = getresourcepath(src);
-        const cacheKey = finalSrc;
 
-        // Check if resources are embedded (single file build)
         const embeddedResources = (window as any).__resources;
         if (embeddedResources && embeddedResources[src]) {
-            // Use embedded resource (data URI)
             finalSrc = embeddedResources[src];
         }
+
+        const cacheKey = src; // 👈 WICHTIG: NICHT finalSrc
 
         img.onload = () => {
             // Cache speichern - always use the same cache key for consistency
@@ -57,7 +56,7 @@ export function loadTextureAsync(src: string): Promise<HTMLImageElement> {
 
 // Function to get the Texture
 export function getTexture(src: string): Texture {
-    return textures[getresourcepath(src)];
+    return textures[src];
 }
 
 // Function to draw a texture to the Screen

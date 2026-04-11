@@ -22,7 +22,7 @@ import { startEngine } from "samengine";
 import { makeRect } from "samengine/types";
 
 const { canvas, ctx, applyScaling, virtualWidth, virtualHeight } = createCanvas({fullscreen: true, scaling: "fit", virtualWidth: window.innerWidth, virtualHeight: window.innerHeight});
-setupInput(canvas);
+setupInput(canvas, virtualWidth, virtualHeight);
 
 enableFullscreen(canvas);
 setupFullscreenButton(canvas);
@@ -63,7 +63,7 @@ import { dlog } from "samengine";
 import { Key } from "samengine";
 
 const { canvas, ctx, applyScaling, virtualWidth, virtualHeight } = createCanvas({fullscreen: true, scaling: "fit", virtualWidth: window.innerWidth, virtualHeight: window.innerHeight});
-setupInput(canvas);
+setupInput(canvas, virtualWidth, virtualHeight);
 
 enableFullscreen(canvas);
 setupFullscreenButton(canvas);

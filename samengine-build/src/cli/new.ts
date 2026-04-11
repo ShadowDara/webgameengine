@@ -16,11 +16,12 @@ export async function createProject(name: string, empty: boolean) {
     let content = `
 // A empty Project with the Web Framework
 
-import { createCanvas, enableFullscreen, setupFullscreenButton } from "samengine";
+import { createCanvas, drawRect, enableFullscreen, setupFullscreenButton } from "samengine";
 import { setupInput, resetInput, getMouse } from "samengine";
 import { startEngine } from "samengine";
+import { makeRect } from "samengine/types";
 
-const { canvas, ctx, applyScaling } = createCanvas({fullscreen: true, scaling: "fit", virtualWidth: window.innerWidth, virtualHeight: window.innerHeight});
+const { canvas, ctx, applyScaling, virtualWidth, virtualHeight } = createCanvas({fullscreen: true, scaling: "fit", virtualWidth: window.innerWidth, virtualHeight: window.innerHeight});
 setupInput(canvas);
 
 enableFullscreen(canvas);
@@ -39,6 +40,9 @@ function gameLoop(dt: number) {
 
     applyScaling();
 
+    // White Background
+    drawRect(ctx, makeRect(0, 0, virtualWidth, virtualHeight), "white");
+
     resetInput();
 }
 
@@ -46,7 +50,7 @@ function gameLoop(dt: number) {
 startEngine(() => { gameStart().then(() => {/* ready */}) }, gameLoop);
 `;
 
-    if (empty) {
+    if (!empty) {
         content =`
 // A mini Snake Clone with my Webframework
 
@@ -58,8 +62,11 @@ import { Vector2d } from "samengine/types";
 import { dlog } from "samengine";
 import { Key } from "samengine";
 
-const { canvas, ctx } = createCanvas({fullscreen: true, scaling: "fit", virtualWidth: window.innerWidth, virtualHeight: window.innerHeight});
+const { canvas, ctx, applyScaling, virtualWidth, virtualHeight } = createCanvas({fullscreen: true, scaling: "fit", virtualWidth: window.innerWidth, virtualHeight: window.innerHeight});
 setupInput(canvas);
+
+enableFullscreen(canvas);
+setupFullscreenButton(canvas);
 
 let snake: Vector2d[] = [{ x: 10, y: 10 }];
 let dir: Vector2d = { x: 1, y: 0 };
@@ -74,6 +81,12 @@ async function gameStart() {
 }
 
 function gameLoop(dt: number) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const mouse = getMouse();
+
+    applyScaling();
+
     if (isKeyJustPressed(Key.Escape)) {
         start = !start
     }
@@ -139,7 +152,6 @@ function gameLoop(dt: number) {
         ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
 
         renderText(ctx, "Score: " + (snake.length - 1), 10, 10, "yellow", "24px Arial");
-
     }
 
     // Reset Input
@@ -166,6 +178,7 @@ import { new_buildconfig } from "samengine-build";
 
 export default function defineConfig(): buildconfig {
     let config: buildconfig = new_buildconfig();
+    config.title = "${name}";
     return config;
 }
 `

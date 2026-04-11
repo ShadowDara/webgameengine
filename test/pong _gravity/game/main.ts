@@ -62,7 +62,7 @@ const speed = 500;
 async function gameStart() {
 
     // Gravity 😈
-    world.gravity = makeVector2d(0, 50);
+    world.gravity = makeVector2d(0, 250);
 
     // Ball
     ball = new PhysicsObject(
@@ -183,6 +183,11 @@ function gameLoop(dt: number) {
         ),
         "white"
     );
+
+    // Middle line
+    for (let y = 0; y < virtualHeight; y += 40) {
+        drawRect(ctx, makeRect(virtualWidth / 2 - 5, y, 10, 20), "white");
+    }
 
     // Score
     renderText(ctx, scoreLeft.toString(), virtualWidth * 0.25, 80, "white", "60px Arial");

@@ -1,7 +1,7 @@
 // Button
 
 import { Rect } from "./rectangle.js";
-import { getMouse } from "../input.js";
+import { getMouse, Mouse } from "../input.js";
 import { isRectClicked } from "./rectangle.js";
 import { drawRect } from "../renderer.js";
 import { renderText } from "../renderer.js";
@@ -20,8 +20,7 @@ export function makeButton(form: Rect, text: string): Button {
 }
 
 // Prüft, ob der Button geklickt wurde
-export function clickedButton(btn: Button): boolean {
-    const mouse = getMouse();
+export function clickedButton(btn: Button, mouse: Mouse): boolean {
     return isRectClicked(mouse, btn.form);
 }
 

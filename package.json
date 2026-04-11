@@ -16,7 +16,8 @@
     "./types": "./dist/types/index.js",
     "./sound": "./dist/sound/index.js",
     "./utils": "./dist/utils/index.js",
-    "./build": "./dist/build/index.js"
+    "./build": "./dist/build/index.js",
+    "./physics": "./dist/physics/index.js"
   },
   "keywords": [
     "game",

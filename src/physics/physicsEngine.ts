@@ -1,4 +1,4 @@
-import { makeVector2d, Vector2d, scale2d, add2d } from "../types/vector2d.js";
+import { makeVector2d, Vector2d, scale2d, add2d, subtract2d, dot2d } from "../types/vector2d.js";
 import { aabbCollision, circleBoxCollision, circleCollision, positionalCorrection, resolveCollision } from "./collision.js";
 import { PhysicsObject } from "./physicsObject.js";
 
@@ -77,7 +77,32 @@ export class PhysicsWorld {
 
                 if (collision) {
                     resolveCollision(a, b, collision.normal);
-                    positionalCorrection(a, b, collision.normal, collision.penetration);
+
+                    // 👉 HIER REIN!
+                    if (!a.body.isStatic && b.body.isStatic) {
+                        const dot = dot2d(a.body.velocity, collision.normal);
+                        if (dot < 0) {
+                            a.body.velocity = subtract2d(a.body.velocity,
+                                scale2d(collision.normal, dot * 2)
+                            );
+                        }
+                    }
+
+                    if (!b.body.isStatic && a.body.isStatic) {
+                        const dot = dot2d(b.body.velocity, scale2d(collision.normal, -1));
+                        if (dot < 0) {
+                            b.body.velocity = subtract2d(b.body.velocity, 
+                                scale2d(scale2d(collision.normal, -1), dot * 2)
+                            );
+                        }
+                    }
+
+                    positionalCorrection(
+                        a,
+                        b,
+                        collision.normal,
+                        collision.penetration
+                    );
                 }
             }
         }

@@ -11,7 +11,7 @@ function getMDNotes(config: buildconfig): string {
     let mdnotes_str: string = "";
 
     if (config.markdown_notes.length > 0) {
-        mdnotes_str += "<div>";
+        mdnotes_str += '<div id="mdnotes">';
 
         for (let i = 0; i < config.markdown_notes.length; i++) {
             mdnotes_str += "<details>";
@@ -21,6 +21,95 @@ function getMDNotes(config: buildconfig): string {
         }
 
         mdnotes_str += "</div>";
+        mdnotes_str += `
+<style>
+/* Markdown Notes Container */
+#mdnotes, #mdnotes div {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    max-width: 400px;
+    max-height: 60vh;
+    overflow-y: auto;
+    z-index: 900;
+    font-size: 0.9rem;
+}
+
+/* Einzelne Note */
+#mdnotes details {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    backdrop-filter: blur(6px);
+}
+
+/* Titel (Summary) */
+#mdnotes summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: #38bdf8;
+    outline: none;
+    list-style: none;
+}
+
+/* Pfeil entfernen (optional cleaner look) */
+#mdnotes summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Custom Pfeil */
+#mdnotes summary::before {
+    content: "▶";
+    display: inline-block;
+    margin-right: 6px;
+    transition: transform 0.2s ease;
+}
+
+/* Pfeil gedreht wenn offen */
+#mdnotes details[open] summary::before {
+    transform: rotate(90deg);
+}
+
+/* Markdown Content */
+#mdnotes details p {
+    margin: 8px 0;
+    line-height: 1.4;
+    color: #e2e8f0;
+}
+
+#mdnotes details h1,
+#mdnotes details h2,
+#mdnotes details h3 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #f8fafc;
+}
+
+#mdnotes details code {
+    background: rgba(0,0,0,0.4);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+#mdnotes details pre {
+    background: rgba(0,0,0,0.5);
+    padding: 8px;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+#mdnotes details a {
+    color: #22c55e;
+    text-decoration: none;
+}
+
+#mdnotes details a:hover {
+    text-decoration: underline;
+}
+</style>`;
     }
 
     return mdnotes_str;

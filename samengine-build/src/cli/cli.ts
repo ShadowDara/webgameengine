@@ -53,7 +53,7 @@ function createBuilder(config: any, isRelease: boolean, isSingleFile: boolean = 
                 if (isRelease) html = await compressHTML(html);
                 
                 // Add comment at the beginning after minification
-                const htmlComment = `<!-- Game made with samengine v${config.version} - https://github.com/Shadowdara/samengine -->\n`;
+                const htmlComment = `<!-- Game made with samengine v${version()} - https://github.com/Shadowdara/samengine -->\n`;
                 html = htmlComment + html;
                 
                 await writeFile("./dist/index.html", html);

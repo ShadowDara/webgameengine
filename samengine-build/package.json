@@ -1,6 +1,6 @@
 {
   "name": "samengine-build",
-  "version": "1.7.4",
+  "version": "1.7.6",
   "description": "The build and export Tool for samengine.",
   "sideEffects": false,
   "files": [

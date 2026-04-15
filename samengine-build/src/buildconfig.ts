@@ -7,15 +7,22 @@ export interface buildconfig {
     show_fullscreen_button: boolean;
     entryname: string;
     outdir: string;
+    markdown_notes: Paragraph[];
+}
+
+export interface Paragraph {
+    title: string;
+    content: string;
 }
 
 export function new_buildconfig(): buildconfig {
     return {
         htmlhead: "",
         title: "My new Game",
-        version: "0.0.0",
+        version: "Your Game Version",
         show_fullscreen_button: true,
         entryname: "main",
         outdir: "dist",
+        markdown_notes: []
     }
 }

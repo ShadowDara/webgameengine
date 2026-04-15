@@ -3,11 +3,33 @@
 // Function to create the Export HTML for the Build
 import { version } from "samengine/build";
 import type { buildconfig } from "./buildconfig.js";
+import { parseMarkdown } from "samengine/utils";
 
-export function GetSingleFileHTML(config: buildconfig, bundledJsContent: string, resourcesMap: Record<string, string> = {}): string {
-    let frameworkVersion = version();
-    let  fullscreenbutton = "";
-    let fullscreenBtn = "";
+
+// Function which formats the HTML for the Notes
+function getMDNotes(config: buildconfig): string {
+    let mdnotes_str: string = "";
+
+    if (config.markdown_notes.length > 0) {
+        mdnotes_str += "<div>";
+
+        for (let i = 0; i < config.markdown_notes.length; i++) {
+            mdnotes_str += "<details>";
+            mdnotes_str += "<summary>" + config.markdown_notes[i].title + "</summary>";
+            mdnotes_str += parseMarkdown(config.markdown_notes[i].content);
+            mdnotes_str += "</details>";
+        }
+
+        mdnotes_str += "</div>";
+    }
+
+    return mdnotes_str;
+}
+
+
+function getFullscreenButton(config: buildconfig): string {
+    let fullscreenbutton = "";
+
     if (config.show_fullscreen_button) {
         fullscreenbutton = `#fullscreenBtn {
     position: fixed;
@@ -29,9 +51,26 @@ export function GetSingleFileHTML(config: buildconfig, bundledJsContent: string,
 #fullscreenBtn:hover {
     background: rgba(0, 0, 0, 0.8);
 }`;
+    }
+
+    return fullscreenbutton;
+}
+
+
+function getFullscreenButtonHTML(config: buildconfig): string {
+    let fullscreenBtn = "";
+
+    if (config.show_fullscreen_button) {
         fullscreenBtn = `<!-- Button to make it fullscreen -->
 <button id="fullscreenBtn">⛶ Fullscreen</button>`;
     }
+
+    return fullscreenBtn;
+}
+
+
+export function GetSingleFileHTML(config: buildconfig, bundledJsContent: string, resourcesMap: Record<string, string> = {}): string {
+    let frameworkVersion = version();
 
     // Create a resource loader function that will be embedded in the HTML
     const resourceLoaderScript = `window.__resources = ${JSON.stringify(resourcesMap)};
@@ -110,17 +149,21 @@ h2 {
 .startbutton:hover {
     background: #16a34a;
 }
-${fullscreenbutton}
+
+${getFullscreenButton(config)}
+
 </style>
-  </head>
-  <body>
-  <div id="startscreen">
+    </head>
+    <body>
+    <div id="startscreen">
         <h2>made with samengine</h2>
         <h1>${config.title}</h1>
         <p>${config.version}</p>
 
         <button class="startbutton" id="startBtn">Start</button>
     </div>
+
+    ${getMDNotes(config)}
 
     <script>
         ${resourceLoaderScript}
@@ -148,7 +191,9 @@ ${fullscreenbutton}
             window.__initializeGame();
         });
     </script>
-    ${fullscreenBtn}
+
+    ${getFullscreenButtonHTML(config)}
+
   </body>
 </html>
 `;
@@ -158,32 +203,6 @@ ${fullscreenbutton}
 
 export function GetDefaultHTML(config: buildconfig): string {
     let frameworkVersion = version()
-    let  fullscreenbutton = "";
-    let fullscreenBtn = "";
-    if (config.show_fullscreen_button) {
-        fullscreenbutton = `#fullscreenBtn {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-
-    padding: 10px 15px;
-    font-size: 16px;
-
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    border: none;
-    border-radius: 6px;
-
-    cursor: pointer;
-    z-index: 1000;
-}
-
-#fullscreenBtn:hover {
-    background: rgba(0, 0, 0, 0.8);
-}`;
-        fullscreenBtn = `<!-- Button to make it fullscreen -->
-<button id="fullscreenBtn">⛶ Fullscreen</button>`;
-    }
 
     const defaulthtml: string = `<!-- HTML Web Game made with samengine by Shadowdara -->
 <!-- DO NOT REMOVE THIS NOTE ! -->    
@@ -240,17 +259,21 @@ h2 {
 .startbutton:hover {
     background: #16a34a;
 }
-${fullscreenbutton}
+
+${getFullscreenButton(config)}
+
 </style>
-  </head>
-  <body>
-  <div id="startscreen">
+    </head>
+    <body>
+    <div id="startscreen">
         <h2>made with samengine</h2>
         <h1>${config.title}</h1>
         <p>${config.version}</p>
 
         <button class="startbutton" id="startBtn">Start</button>
     </div>
+
+    ${getMDNotes(config)}
 
     <script type="module">
         const btn = document.getElementById("startBtn");
@@ -276,7 +299,9 @@ ${fullscreenbutton}
             version: "${frameworkVersion}"
         };
     </script>
-    ${fullscreenBtn}
+
+    ${getFullscreenButtonHTML(config)}
+
   </body>
 </html>
 `;

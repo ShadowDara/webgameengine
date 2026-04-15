@@ -16,3 +16,6 @@ This package uses other Version numbers than **samengine** and
 
 Linksaver moved, because i decied that GO would be a better language
 for CLI Tools
+
+And Probably more Tools for samengine will not be written in JS, but
+they will be mentioned in the README File of the samengine Framework!

@@ -44,7 +44,7 @@ export function loadTextureAsync(src: string): Promise<HTMLImageElement> {
         };
 
         img.onerror = () => {
-            const msg = `❌ Failed to load texture: ${finalSrc}`;
+            const msg = `Failed to load texture: ${finalSrc}`;
             console.error(msg);
             reject(new Error(msg));
         };

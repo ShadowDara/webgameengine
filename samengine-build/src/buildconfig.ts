@@ -8,6 +8,7 @@ export interface buildconfig {
     entryname: string;
     outdir: string;
     markdown_notes: Paragraph[];
+    gameauthor: string;
 }
 
 export interface Paragraph {
@@ -23,6 +24,7 @@ export function new_buildconfig(): buildconfig {
         show_fullscreen_button: true,
         entryname: "main",
         outdir: "dist",
-        markdown_notes: []
+        markdown_notes: [],
+        gameauthor: "DEV",
     }
 }

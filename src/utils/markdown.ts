@@ -102,6 +102,19 @@ function renderInline(text: string, opts: ParseOptions): string {
         });
     }
 
+    // Links  [text](url "title")
+    text = text.replace(
+        /\[([^\]]+)\]\(([^)]+?)(?:\s+"([^"]*)")?\)/g,
+        (_, linkText, url, title) => {
+            const t = title ? ` title="${escapeHtml(title)}"` : "";
+            const ext =
+                opts.externalLinks && isExternalUrl(url)
+                    ? ' target="_blank" rel="noopener noreferrer"'
+                    : "";
+            return `<a href="${url}"${t}${ext}>${renderInline(linkText, opts)}</a>`;
+        }
+    );
+
     // Code-Spans (höchste Priorität, vor allem anderen)
     text = text.replace(/`{2}([^`]+)`{2}|`([^`\n]+)`/g, (_, a, b) => {
         return `<code>${escapeHtml(a ?? b)}</code>`;
@@ -113,19 +126,6 @@ function renderInline(text: string, opts: ParseOptions): string {
         (_, alt, url, title) => {
             const t = title ? ` title="${escapeHtml(title)}"` : "";
             return `<img src="${url}" alt="${escapeHtml(alt)}"${t}>`;
-        }
-    );
-
-    // Links  [text](url "title")
-    text = text.replace(
-        /\[([^\]]+)\]\(([^)]+?)(?:\s+"([^"]*)")?\)/g,
-        (_, linkText, url, title) => {
-            const t = title ? ` title="${escapeHtml(title)}"` : "";
-            const ext =
-                opts.externalLinks && isExternalUrl(url)
-                    ? ' target="_blank" rel="noopener noreferrer"'
-                    : "";
-            return `<a href="${url}"${t}${ext}>${renderInline(linkText, opts)}</a>`;
         }
     );
 

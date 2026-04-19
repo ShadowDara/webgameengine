@@ -290,7 +290,13 @@ function parseTable(block: string, opts: ParseOptions): string {
     const headerCells = rows[0]
         .split(/(?<!\\)\|/)
         .filter((_, i, a) => !(i === 0 && _ === "") && !(i === a.length - 1 && _ === ""))
-        .map((c) => c.trim());
+        .map((c) =>
+            c
+                .trim()
+                .replace(/\\\|/g, "|")
+                .replace(/\\\[/g, "[")
+                .replace(/\\\]/g, "]")
+        );
 
     const alignRow = rows[1].split(/(?<!\\)\|/).filter((c) => /[-:]/.test(c));
     const aligns = alignRow.map((c) => {
@@ -312,7 +318,13 @@ function parseTable(block: string, opts: ParseOptions): string {
         const cells = row
             .split(/(?<!\\)\|/)
             .filter((_, i, a) => !(i === 0 && _ === "") && !(i === a.length - 1 && _ === ""))
-            .map((c) => c.trim());
+            .map((c) =>
+                c
+                    .trim()
+                    .replace(/\\\|/g, "|")
+                    .replace(/\\\[/g, "[")
+                    .replace(/\\\]/g, "]")
+            );
         return `<tr>\n${cells
             .map((c, i) => {
                 const align = aligns[i] ? ` style="text-align:${aligns[i]}"` : "";
@@ -758,9 +770,9 @@ export function parse(markdown: string, options: ParseOptions = {}): string {
  */
 export function parseToDocument(
     markdown: string,
-    options: ParseOptions & { title?: string; css?: string } = {}
+    options: ParseOptions & { title?: string; css?: string, header?: string, } = {}
 ): string {
-    const { title = "Dokument", css = defaultCss, ...parseOpts } = options;
+    const { title = "Dokument", header = "", css = defaultCss, ...parseOpts } = options;
     const body = parse(markdown, parseOpts);
     return `<!DOCTYPE html>
 <html lang="de">
@@ -769,6 +781,7 @@ export function parseToDocument(
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeHtml(title)}</title>
 <style>${css}</style>
+${header}
 </head>
 <body>
 <article class="md-body">

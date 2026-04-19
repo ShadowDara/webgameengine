@@ -288,11 +288,11 @@ function parseTable(block: string, opts: ParseOptions): string {
     if (rows.length < 2) return `<p>${renderInline(block, opts)}</p>`;
 
     const headerCells = rows[0]
-        .split("|")
+        .split(/(?<!\\)\|/)
         .filter((_, i, a) => !(i === 0 && _ === "") && !(i === a.length - 1 && _ === ""))
         .map((c) => c.trim());
 
-    const alignRow = rows[1].split("|").filter((c) => /[-:]/.test(c));
+    const alignRow = rows[1].split(/(?<!\\)\|/).filter((c) => /[-:]/.test(c));
     const aligns = alignRow.map((c) => {
         c = c.trim();
         if (c.startsWith(":") && c.endsWith(":")) return "center";
@@ -310,7 +310,7 @@ function parseTable(block: string, opts: ParseOptions): string {
 
     const bodyRows = rows.slice(2).map((row) => {
         const cells = row
-            .split("|")
+            .split(/(?<!\\)\|/)
             .filter((_, i, a) => !(i === 0 && _ === "") && !(i === a.length - 1 && _ === ""))
             .map((c) => c.trim());
         return `<tr>\n${cells

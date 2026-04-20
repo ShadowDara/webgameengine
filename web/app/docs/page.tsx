@@ -1,12 +1,10 @@
-import Link from "next/link";
-
-export default function Home() {
-    return (
-        <div>
-            <h1>
-                Docs (Work in Progress)
-            </h1>
-            <Link href="/" className="underline">Back to the Homepage</Link>
-        </div>
-    );
+// app/docs/page.tsx
+export default function DocsHome() {
+  return (
+    <div>
+      <h1>Documentation</h1>
+      <p>Welcome to the docs for samengine</p>
+      <p>This is Work in Progress</p>
+    </div>
+  );
 }

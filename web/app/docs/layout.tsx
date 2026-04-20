@@ -1,8 +1,13 @@
 // app/docs/layout.tsx
 import Link from "next/link";
 import { getDocSlugs } from "@/lib/docs";
+import { ReactNode } from "react";
 
-export default function DocsLayout({ children }) {
+export default function DocsLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const slugs = getDocSlugs();
 
   return (

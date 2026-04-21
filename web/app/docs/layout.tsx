@@ -17,9 +17,15 @@ export default function DocsLayout({
 
   return (
     <div style={{ display: "flex" }}>
-      <aside style={{ width: "250px", padding: "20px" }}>
+      <aside style={{ width: "250px", padding: "20px" }} className="bg-zinc-900 min-h-screen">
+        
+        {/* Get back to the Homepage */}
+        <p className="mb-1">
+          <Link href="/" className="hover:underline p-1">Home</Link>
+        </p>
+
         <h2>
-          <Link href="/docs">Docs</Link>
+          <Link href="/docs" className="hover:underline p-1">Docs</Link>
         </h2>
 
         <ul>
@@ -27,7 +33,7 @@ export default function DocsLayout({
             const name = slug.replace(".md", "");
 
             return (
-              <li key={slug}>
+              <li key={slug} className="hover:underline p-1">
                 <Link href={`/docs/${name}`}>{name}</Link>
               </li>
             );
@@ -35,7 +41,12 @@ export default function DocsLayout({
         </ul>
       </aside>
 
-      <main style={{ padding: "20px", flex: 1 }}>{children}</main>
+      <main
+        style={{ padding: "20px", flex: 1 }}
+        className="mb-13 mt-8 ml-5"
+      >
+        {children}
+      </main>
     </div>
   );
 }

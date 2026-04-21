@@ -15,6 +15,11 @@ A lightweight, TypeScript-first web game engine framework for building
 - 💾 Save/Load system
 
 
+## Info
+
+For better Infos read the [Docs](samengine.vercel.app/docs)
+
+
 ## Quick Start
 
 ```sh
@@ -70,24 +75,7 @@ npx samengine-build --new (newproject)    # Create a new project with a
 npx samengine-build --new-empty (new)     # Create a new empty project
 ```
 
-
-### Configuration
-
-Edit `samengine.config.ts` to configure your game:
-
-```typescript
-import { defineConfig } from 'samengine-build';
-
-export function defineConfig() {
-  return {
-    entryname: 'main',
-    outdir: 'dist',
-    // ... other config
-  };
-}
-```
-
-or
+## Config
 
 ```typescript
 // Project File for the Game

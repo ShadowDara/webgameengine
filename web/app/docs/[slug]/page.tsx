@@ -28,7 +28,7 @@ export default async function DocPage({
   const doc = getDocBySlug(slug);
 
   return (
-    <div className="prose dark:prose-invert">
+    <div className="prose dark:prose-invert min-w-full">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}

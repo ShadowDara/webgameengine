@@ -4,7 +4,7 @@
   "description": "CLI which help with samengine",
   "scripts": {
     "build": "tsc",
-    "pack": "node ../scripts/clean.js && npm run build && npm pack && git push --follow-tags && node ../scripts/checkversion.js"
+    "pack": "node ../scripts/clean.js && npm run build && npm pack && git push --follow-tags"
   },
   "bin": {
     "samengine-cli-linksaver": "dist/linksaver.js",
@@ -22,7 +22,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shadowdara/samengine"
+    "url": "https://github.com/shadowdara/samengine",
+    "directory": "samengine-cli"
   },
   "bugs": {
     "url": "https://github.com/shadowdara/samengine/issues"

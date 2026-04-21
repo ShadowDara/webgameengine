@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "pack": "node scripts/clean.js && npm run build && npm pack && git push --follow-tags && node scripts/checkversion.js",
+    "pack": "node scripts/clean.js && npm run build && npm pack && git push --follow-tags",
     "test": "bun test"
   },
   "exports": {

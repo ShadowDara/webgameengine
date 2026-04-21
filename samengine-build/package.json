@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "pack": "node ../scripts/clean.js && npm run build && npm pack && git push --follow-tags && node ../scripts/checkversion.js"
+    "pack": "node ../scripts/clean.js && npm run build && npm pack && git push --follow-tags"
   },
   "exports": {
     ".": "./dist/index.js",
@@ -30,13 +30,13 @@
     "esbuild": "^0.28.0",
     "html-minifier-terser": "^7.2.0",
     "mime": "^4.1.0",
-    "samengine": "^1.7.7",
     "ws": "^8.20.0"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shadowdara/samengine"
+    "url": "https://github.com/shadowdara/samengine",
+    "directory": "samengine-build"
   },
   "bugs": {
     "url": "https://github.com/shadowdara/samengine/issues"

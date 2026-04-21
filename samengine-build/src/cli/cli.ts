@@ -15,8 +15,10 @@ import { GetDefaultHTML, GetSingleFileHTML } from "../exporthtml.js";
 import { loadUserConfig } from "./config.js";
 import { compressHTML } from "../utils/utils.js";
 import { type CLIArgs, parseArgs } from "./argparser.js";
-import { version } from "samengine/build";
 import { buildconfig } from "../buildconfig.js";
+import { getPackageVersion } from "../getversion.js";
+
+const version = getPackageVersion("samengine");
 
 // ================= BUILD =================
 function createBuilder(config: buildconfig, isRelease: boolean, isSingleFile: boolean = false) {
@@ -54,7 +56,7 @@ function createBuilder(config: buildconfig, isRelease: boolean, isSingleFile: bo
                 if (isRelease) html = await compressHTML(html);
                 
                 // Add comment at the beginning after minification
-                const htmlComment = `<!-- Game made with samengine v${version()} - https://github.com/Shadowdara/samengine ${config.gameauthor} (Game Author) -->\n`;
+                const htmlComment = `<!-- Game made with samengine v${version} - https://github.com/Shadowdara/samengine ${config.gameauthor} (Game Author) -->\n`;
                 html = htmlComment + html;
                 
                 await writeFile("./dist/index.html", html);
@@ -69,13 +71,13 @@ function createBuilder(config: buildconfig, isRelease: boolean, isSingleFile: bo
                 if (isRelease) html = await compressHTML(html);
                 
                 // Add HTML comment at the beginning after minification
-                const htmlComment = `<!-- Game made with samengine v${version()} - https://www.npmjs.com/samengine ${config.gameauthor} (Game Author) -->\n`;
+                const htmlComment = `<!-- Game made with samengine v${version} - https://www.npmjs.com/samengine ${config.gameauthor} (Game Author) -->\n`;
                 html = htmlComment + html;
                 
                 await writeFile("./dist/index.html", html);
                 
                 // Add JS comment at the beginning of JS files
-                const jsComment = `// Game made with samengine v${version()} - https://www.npmjs.com/samengine by ${config.gameauthor} (Game Author)\n`;
+                const jsComment = `// Game made with samengine v${version} - https://www.npmjs.com/samengine by ${config.gameauthor} (Game Author)\n`;
                 const jsPath = path.join(".", config.outdir, `${config.entryname.replace(/\.[^.]*$/, "")}.js`);
                 let jsContent = await readFile(jsPath, "utf-8");
                 jsContent = jsComment + jsContent;

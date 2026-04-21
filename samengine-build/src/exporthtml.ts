@@ -1,9 +1,11 @@
 // Function to create the Export HTML for the Build
 
 // Function to create the Export HTML for the Build
-import { version } from "samengine/build";
 import type { buildconfig } from "./buildconfig.js";
 import { parseMarkdown } from "samengine/utils";
+import { getPackageVersion } from "./getversion.js";
+
+const version = getPackageVersion("samengine");
 
 // function to get the startscreen
 function getStartScreen(config: buildconfig): string {
@@ -224,7 +226,7 @@ function getFullscreenButtonHTML(config: buildconfig): string {
 //
 //
 export function GetSingleFileHTML(config: buildconfig, bundledJsContent: string, resourcesMap: Record<string, string> = {}): string {
-    let frameworkVersion = version();
+    let frameworkVersion = version;
 
     // Create a resource loader function that will be embedded in the HTML
     const resourceLoaderScript = `window.__resources = ${JSON.stringify(resourcesMap)};
@@ -312,7 +314,7 @@ ${getFullscreenButton(config)}
 //
 //
 export function GetDefaultHTML(config: buildconfig): string {
-    let frameworkVersion = version()
+    let frameworkVersion = version;
 
     const defaulthtml: string = `<!DOCTYPE html>
 <html>

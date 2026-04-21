@@ -8,7 +8,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 
 export default function DocsHome() {
-  const { slug, content } = getDocBySlug("readme");
+  const { slug, content } = getDocBySlug("README");
 
   return (
     <div className="prose dark:prose-invert">

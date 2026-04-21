@@ -1,3 +1,8 @@
+// app/page.tsx
+
+// Make it static!
+export const dynamic = "force-static";
+
 import Link from "next/link";
 
 export default function Home() {

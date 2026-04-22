@@ -1,6 +1,6 @@
 {
   "name": "samengine-build",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "description": "The build and export Tool for samengine.",
   "sideEffects": false,
   "files": [
@@ -23,7 +23,7 @@
     "@types/html-minifier-terser": "^7.0.2",
     "@types/node": "^25.5.2",
     "@types/ws": "^8.18.1",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "chalk": "^5.6.2",

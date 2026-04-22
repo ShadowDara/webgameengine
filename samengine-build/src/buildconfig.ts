@@ -10,6 +10,11 @@ export interface buildconfig {
     markdown_notes: Paragraph[];
     gameauthor: string;
     dev_server_port: number;
+    settings: Settings;
+}
+
+export interface Settings {
+    show_button: boolean;
 }
 
 export interface Paragraph {
@@ -34,6 +39,7 @@ export function new_buildconfig(): buildconfig {
         gameauthor: "DEV",
         htmlhead: `<link rel="icon" href="data:image/svg+xml;base64,${btoa(svgfile)}">`,
         dev_server_port: 3000,
+        settings: { show_button: false }
     }
 }
 

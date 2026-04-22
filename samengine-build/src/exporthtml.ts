@@ -221,6 +221,96 @@ function getFullscreenButtonHTML(config: buildconfig): string {
 }
 
 
+function getSettingsButton(config: buildconfig): string {
+    let content = "";
+
+    if (config.settings.show_button) {
+        content = `
+<!-- Button -->
+<button id="fab">+</button>
+`;
+    }
+
+    return content;
+}
+
+
+function getSettingsButtonCSS(config: buildconfig): string {
+    let content = "";
+
+    if (config.settings.show_button) {
+        content = `/* Floating Button */
+    #fab {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #0070f3;
+      color: white;
+      font-size: 30px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Menü */
+    #menu {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      display: none;
+    }
+
+    #menu p {
+      margin: 5px 0;
+      cursor: pointer;
+    }
+
+    #menu p:hover {
+      color: #0070f3;
+    }`;
+    }
+
+    return content;
+}
+
+
+function getSettingsButtonJS(config: buildconfig): string {
+    let content = "";
+
+    if (config.settings.show_button) {
+        content = `
+<script>
+        const fab = document.getElementById("fab");
+    const menu = document.getElementById("menu");
+
+    fab.addEventListener("click", () => {
+      if (menu.style.display === "none" || menu.style.display === "") {
+        menu.style.display = "block";
+      } else {
+        menu.style.display = "none";
+      }
+    });
+
+    // Optional: Klick außerhalb schließt Menü
+    document.addEventListener("click", (e) => {
+      if (!fab.contains(e.target) && !menu.contains(e.target)) {
+        menu.style.display = "none";
+      }
+    });
+</script>
+`;
+    }
+
+    return content;
+}
+
+
 //
 ///////////////////////////////////////////////////////////////////////////////////
 //
@@ -309,11 +399,12 @@ ${getFullscreenButton(config)}
     return defaulthtml;
 }
 
+
 //
 //////////////////////////////////////////////////////////////////////////////////////////
 //
 //
-export function GetDefaultHTML(config: buildconfig): string {
+export function GetDefaultHTML(config: buildconfig, releasemode: boolean): string {
     let frameworkVersion = version;
 
     const defaulthtml: string = `<!DOCTYPE html>
@@ -329,12 +420,16 @@ ${getStandardCSS(config)}
 
 ${getFullscreenButton(config)}
 
+${getSettingsButtonCSS(config)}
+
 </style>
     </head>
     <body>
     ${getStartScreen(config)}
 
     ${getMDNotes(config)}
+
+    ${getSettingsButton(config)}
 
     <script type="module">
         const btn = document.getElementById("startBtn");
@@ -363,6 +458,8 @@ ${getFullscreenButton(config)}
             version: "${frameworkVersion}"
         };
     </script>
+
+    ${getSettingsButtonJS(config)}
 
     ${getFullscreenButtonHTML(config)}
 

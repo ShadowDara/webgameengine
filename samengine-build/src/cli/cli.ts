@@ -67,7 +67,7 @@ function createBuilder(config: buildconfig, isRelease: boolean, isSingleFile: bo
                 flog("✅ Single-file export created!");
             } else {
                 // Multi-file export (original behavior)
-                let html = GetDefaultHTML(config);
+                let html = GetDefaultHTML(config, isRelease);
                 if (isRelease) html = await compressHTML(html);
                 
                 // Add HTML comment at the beginning after minification

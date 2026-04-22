@@ -1,5 +1,11 @@
+##### Blocked Through Code
+
 /changelog
-
 /docs
-
 /u
+
+
+##### Block Through Redirects
+
+/package
+/source

@@ -17,11 +17,11 @@ export default function Home() {
           a Webgameframework written in Typescript for Webgames which export in a single HTML File. <i>(and 3D Games in the Future)</i>
         </p>
         <div className="flex gap-4">
-          <a href="https://npmjs.com/samengine" target="_blank">
+          <Link href="https://npmjs.com/samengine" target="_blank">
             <button className="bg-white text-black px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
               Download Package
             </button>
-          </a>
+          </Link>
           <Link href="/docs">
             <button className="border border-white px-6 py-3 rounded-xl hover:bg-white hover:text-black transition">
               Documentation (Work in Progress)
@@ -30,6 +30,12 @@ export default function Home() {
           <Link href="/changelog">
             <button className="border border-white px-6 py-3 rounded-xl hover:bg-white hover:text-black transition">
               Changelog
+            </button>
+          </Link>
+
+          <Link href="/source">
+            <button className="border border-white px-6 py-3 rounded-xl hover:bg-white hover:text-black transition">
+              Source (Github)
             </button>
           </Link>
         </div>

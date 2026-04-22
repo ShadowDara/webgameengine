@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         destination: "https://www.npmjs.com/package/samengine",
         permanent: true,
       },
+      {
+        source: "/source",
+        destination: "https://github.com/shadowdara/samengine",
+        permanent: true,
+      },
     ];
   },
 };

@@ -226,6 +226,13 @@ function getSettingsButton(config: buildconfig): string {
 
     if (config.settings.show_button) {
         content = `
+<!-- Menü -->
+  <div id="menu">
+    <p>Option 1</p>
+    <p>Option 2</p>
+    <p>Option 3</p>
+  </div>
+
 <!-- Button -->
 <button id="fab">+</button>
 `;

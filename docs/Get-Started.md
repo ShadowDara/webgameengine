@@ -13,11 +13,10 @@
     DO NOT REMOVE THIS CREDIT !!!
 
     Last Update Time of the Index:
-    2026-04-22T15:30:23.307Z
+    2026-04-22T15:56:43.381Z
 -->
 
 ## Index
-- [Get Started](#get-started)
   - [Next Steps](#next-steps)
 <!-- Index by Automatic MD Index -->
 <!--$$MD_INDEX_END$$-->

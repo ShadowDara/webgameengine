@@ -15,15 +15,13 @@ A lightweight, TypeScript-first web game engine framework for building
     DO NOT REMOVE THIS CREDIT !!!
 
     Last Update Time of the Index:
-    2026-04-22T15:30:23.314Z
+    2026-04-22T15:56:43.388Z
 -->
 
 ## Index
-- [Samengine 🎮](#samengine-)
   - [Features](#features)
   - [Info](#info)
   - [Quick Start](#quick-start)
-- [Make sure both of them have the same Version](#make-sure-both-of-them-have-the-same-version)
     - [Basic Game Loop](#basic-game-loop)
   - [Development & Building](#development-building)
     - [Using Bun (local development)](#using-bun-local-development)

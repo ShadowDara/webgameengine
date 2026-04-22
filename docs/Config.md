@@ -11,11 +11,10 @@
     DO NOT REMOVE THIS CREDIT !!!
 
     Last Update Time of the Index:
-    2026-04-22T15:30:23.305Z
+    2026-04-22T15:56:43.379Z
 -->
 
 ## Index
-- [samengine Config](#samengine-config)
   - [Paragraphs](#paragraphs)
     - [How to add them](#how-to-add-them)
 <!-- Index by Automatic MD Index -->

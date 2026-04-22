@@ -251,10 +251,10 @@ function getSettingsButtonCSS(config: buildconfig): string {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: #0070f3;
+      width: 50px;
+      height: 50px;
+      border-radius: 15%;
+      background: rgba(0, 0, 0, 0.6);
       color: white;
       font-size: 30px;
       border: none;
@@ -266,7 +266,7 @@ function getSettingsButtonCSS(config: buildconfig): string {
       position: fixed;
       bottom: 90px;
       right: 20px;
-      background: white;
+      background: rgba(0, 0, 0, 0.6);
       padding: 10px;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);

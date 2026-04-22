@@ -6,7 +6,7 @@ import { flog } from "../buildhelper.js";
 
 // ================= NEW PROJECT =================
 export async function createProject(name: string, empty: boolean) {
-    flog(`📦 Erstelle neues Projekt: ${name}`);
+    flog(`📦 Create new Project: ${name}`);
 
     // Create Dirs
     await mkdir("game", { recursive: true });
@@ -50,11 +50,12 @@ function gameLoop(dt: number) {
 startEngine(() => { gameStart().then(() => {/* ready */}) }, gameLoop);
 `;
 
+    // Make a Snake Clone
     if (!empty) {
         content =`
 // A mini Snake Clone with my Webframework
 
-import { createCanvas } from "samengine";
+import { createCanvas, enableFullscreen, setupFullscreenButton, getMouse } from "samengine";
 import { setupInput, isKeyJustPressed, resetInput } from "samengine";
 import { startEngine } from "samengine";
 import { renderText } from "samengine";
@@ -216,6 +217,7 @@ export default function defineConfig(): buildconfig {
 Run "npm run dev" to start the Dev Server and play a little Snake Clone
 
 Add ".samengine/config.mjs" to your gitignore file if you are using Git.
+
 
 ${chalk.red("Dont ignore the complete Folder!")}
 ${chalk.red("Some Tools by samengine are saving important configs in this Folder!")}

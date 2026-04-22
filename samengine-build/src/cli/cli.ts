@@ -5,7 +5,7 @@
 import { build as esbuild } from "esbuild";
 import { createServer } from "http";
 import { readFile, writeFile, mkdir, rm } from "fs/promises";
-import { watch } from "fs";
+import { watch, watchFile } from "fs";
 import path from "path";
 import { WebSocket, WebSocketServer } from "ws";
 
@@ -141,7 +141,15 @@ function createDevServer(config: buildconfig) {
         sockets.forEach((ws) => ws.send("reload"));
     }
 
-    return { reloadClients };
+    function stop() {
+        flog("🛑 Stopping dev server...");
+
+        sockets.forEach(ws => ws.close());
+        wss.close();
+        server.close();
+    }
+
+    return { reloadClients, stop };
 }
 
 // ================= WATCHER =================
@@ -167,7 +175,7 @@ async function main() {
     }
 
     const config = await loadUserConfig();
-    const builder = createBuilder(config, args.release, args.singlefile);
+    let builder = createBuilder(config, args.release, args.singlefile);
 
     let isBuilding = false;
     let pendingRestart = false;
@@ -182,7 +190,20 @@ async function main() {
         do {
             pendingRestart = false;
             try {
+                // Load the New Config
+                const newConfig = await loadUserConfig();
+
+                // Dev Server Stoppen
+                devServer?.stop();
+
+                // Create new Dev Server
+                devServer = createDevServer(newConfig);
+
+                // New Builder
+                builder = createBuilder(config, args.release, args.singlefile);
+
                 await builder.build();
+
                 devServer?.reloadClients();
             } catch (error) {
                 flog(`❌ Rebuild failed: ${error instanceof Error ? error.message : String(error)}`);
@@ -203,6 +224,14 @@ async function main() {
     // Only start the Dev Server in Release Mode
     if (!args.release) {
         devServer = createDevServer(config);
+
+        // 🔥 HIER EINBAUEN
+        watchFile("samengine.config.ts", { interval: 300 }, async () => {
+            flog("⚙️ Config file changed → full restart");
+
+            await restart();
+        });
+
         await startWatcher(restart);
     }
 

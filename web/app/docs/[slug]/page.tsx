@@ -9,6 +9,7 @@ import { getDocBySlug, getDocSlugs } from "@/lib/docs";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
+import rehypeSlug from "rehype-slug";
 
 export async function generateStaticParams() {
   const slugs = getDocSlugs();
@@ -34,7 +35,7 @@ export default async function DocPage({
     <div className="prose dark:prose-invert min-w-full">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight]}
+        rehypePlugins={[rehypeHighlight, rehypeSlug]}
       >
         {clean}
       </ReactMarkdown>

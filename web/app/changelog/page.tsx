@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
+import rehypeSlug from 'rehype-slug';
 
 export default function ChangelogPage() {
   const filePath = path.join(process.cwd(), "..", "CHANGELOG.md");
@@ -29,6 +30,7 @@ export default function ChangelogPage() {
 
         <article className="prose prose-invert prose-neutral max-w-none">
           <ReactMarkdown
+            rehypePlugins={[rehypeSlug]}
             components={{
               h2: ({ children }) => (
                 <h2 className="text-2xl font-bold mt-10 mb-4 border-b border-neutral-700 pb-2">

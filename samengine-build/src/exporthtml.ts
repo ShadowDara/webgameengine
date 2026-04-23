@@ -390,7 +390,7 @@ ${getFullscreenButton(config)}
             document.getElementById("startscreen").remove();
 
             // Only when there are Markdown Notes
-            ${config.markdown_notes.entries.length == 0 ? `
+            ${config.markdown_notes.length > 0 ? `
 // Markdown Info entfernen
 document.getElementById("mdnotes").remove();
 ` : ""}
@@ -458,7 +458,7 @@ ${getSettingsButtonCSS(config)}
             document.getElementById("startscreen").remove();
             
             // Only when there are Markdown Notes
-            ${config.markdown_notes.entries.length == 0 ? `
+            ${config.markdown_notes.length > 0 ? `
 // Markdown Info entfernen
 document.getElementById("mdnotes").remove();
 ` : ""}

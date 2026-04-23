@@ -9,6 +9,8 @@ import { Vector2d } from "samengine/types";
 import { dlog } from "samengine";
 import { Key } from "samengine";
 
+import { HtmlUI } from "samengine/samegui";
+
 const { canvas, ctx, applyScaling, virtualWidth, virtualHeight } = createCanvas({fullscreen: true, scaling: "fit", virtualWidth: window.innerWidth, virtualHeight: window.innerHeight});
 setupInput(canvas, virtualWidth, virtualHeight);
 
@@ -23,12 +25,27 @@ let lastMove = 0;
 let speed = 0.2; // seconds per cell
 let start = false;
 
+// New UI 
+const ui = new HtmlUI();
+let enabled = false;
+
 async function gameStart() {
     dlog("Snake gestartet");
 }
 
 function gameLoop(dt: number) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ui.begin();
+
+    ui.text("Debug Menu");
+
+    if (ui.button("Toggle")) {
+        enabled = !enabled;
+        console.log("Button Pressed");
+    }
+
+    enabled = ui.checkbox("Enabled", enabled);
 
     const mouse = getMouse();
 

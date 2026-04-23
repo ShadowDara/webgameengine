@@ -19,7 +19,8 @@
     "./sound": "./dist/sound/index.js",
     "./utils": "./dist/utils/index.js",
     "./build": "./dist/build/index.js",
-    "./physics": "./dist/physics/index.js"
+    "./physics": "./dist/physics/index.js",
+    "./samegui": "./dist/samegui/index.js"
   },
   "keywords": [
     "game",

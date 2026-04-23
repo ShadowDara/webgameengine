@@ -25,12 +25,18 @@
 <!--$$MD_INDEX_END$$-->
 
 
-## Future samengine-build (Probably 1.9.3) (22.04.2026)
+## Future samengine-build (Probably 1.9.3)
 
 - Server Reloads when the Config changes
 - fixed a Bug where the wrong config was used
 - fixed a Bug when no Markdown Notes where added
 - Markdown notes are now removed correctly on Game Start
+
+
+## Future samengine ()
+
+- added a has function
+- added a ImGUI inspired UI System
 
 
 ## samengine-build (1.9.2) (22.04.2026)

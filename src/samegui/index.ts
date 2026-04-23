@@ -17,6 +17,8 @@ export class HtmlUI {
     private clicked = new Map<number, boolean>();
     private frameIds: number[] = [];
 
+    private valueMap = new Map<number, boolean>();
+
     constructor() {
         this.root = document.createElement("div");
         this.root.style.position = "absolute";
@@ -105,17 +107,16 @@ export class HtmlUI {
         e.el.textContent = label;
     }
 
-    checkbox(label: string, value: boolean, idOverride?: string): boolean {
+    checkbox(label: string, defaultValue: boolean, idOverride?: string): boolean {
         const id = hash(idOverride ?? label);
         this.frameIds.push(id);
 
-        let current = this.clicked.get(id);
-
-        // initialisieren beim ersten Mal
-        if (current === undefined) {
-            current = value;
-            this.clicked.set(id, current);
+        // initial state only once
+        if (!this.valueMap.has(id)) {
+            this.valueMap.set(id, defaultValue);
         }
+
+        const current = this.valueMap.get(id)!;
 
         let e = this.elements.get(id);
 
@@ -149,7 +150,7 @@ export class HtmlUI {
         input.checked = current;
 
         input.onchange = () => {
-            this.clicked.set(id, input.checked);
+            this.valueMap.set(id, input.checked);
         };
 
         return current;

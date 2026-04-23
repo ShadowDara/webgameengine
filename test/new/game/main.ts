@@ -45,7 +45,9 @@ function gameLoop(dt: number) {
         console.log("Button Pressed");
     }
 
-    enabled = ui.checkbox("Enabled", enabled);
+    enabled = ui.checkbox("Enabled", !enabled);
+
+    ui.end();
 
     const mouse = getMouse();
 

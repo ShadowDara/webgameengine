@@ -1,109 +1,105 @@
 // HTML Overlay
+
 import { hash } from "../utils/index.js";
 
-type UIState = {
-    container: HTMLDivElement;
-    cursorY: number;
+type UIElement = {
+  el: HTMLElement;
+  type: "button" | "text";
 };
 
 export class HtmlUI {
-    private root: HTMLDivElement;
-    private state: UIState;
+  private root: HTMLDivElement;
+  private panel: HTMLDivElement;
 
-    private idCounter = 0;
-    private clickedMap = new Map<number, boolean>();
+  private elements = new Map<number, UIElement>();
+  private clicked = new Map<number, boolean>();
+  private frameIds: number[] = [];
 
-    constructor() {
-        this.root = document.createElement("div");
-        this.root.style.position = "absolute";
-        this.root.style.top = "0";
-        this.root.style.left = "0";
-        this.root.style.width = "100%";
-        this.root.style.height = "100%";
-        this.root.style.pointerEvents = "none";
+  constructor() {
+    this.root = document.createElement("div");
+    this.root.style.position = "absolute";
+    this.root.style.inset = "0";
+    this.root.style.pointerEvents = "none";
+    document.body.appendChild(this.root);
 
-        document.body.appendChild(this.root);
+    this.panel = document.createElement("div");
+    this.panel.style.position = "absolute";
+    this.panel.style.left = "20px";
+    this.panel.style.top = "20px";
+    this.panel.style.padding = "10px";
+    this.panel.style.background = "rgba(30,30,30,0.9)";
+    this.panel.style.color = "white";
+    this.panel.style.pointerEvents = "auto";
+    this.panel.style.borderRadius = "6px";
 
-        this.state = {
-            container: this.createPanel(20, 20),
-            cursorY: 10
-        };
+    this.root.appendChild(this.panel);
+  }
+
+  begin() {
+    this.frameIds = [];
+  }
+
+  end() {
+    // reset clicks AFTER frame
+    for (const id of this.frameIds) {
+      this.clicked.set(id, false);
+    }
+  }
+
+  private getButton(id: number): HTMLButtonElement {
+    let e = this.elements.get(id);
+
+    if (!e) {
+      const btn = document.createElement("button");
+      btn.style.display = "block";
+      btn.style.marginBottom = "6px";
+      btn.style.width = "100%";
+      btn.style.padding = "6px";
+      btn.style.background = "#444";
+      btn.style.color = "white";
+      btn.style.border = "none";
+      btn.style.cursor = "pointer";
+
+      this.panel.appendChild(btn);
+
+      e = { el: btn, type: "button" };
+      this.elements.set(id, e);
     }
 
-    private createPanel(x: number, y: number) {
-        const panel = document.createElement("div");
-        panel.style.position = "absolute";
-        panel.style.left = x + "px";
-        panel.style.top = y + "px";
-        panel.style.background = "rgba(30,30,30,0.9)";
-        panel.style.border = "1px solid #555";
-        panel.style.padding = "10px";
-        panel.style.borderRadius = "6px";
-        panel.style.pointerEvents = "auto";
-        panel.style.color = "white";
-        panel.style.fontFamily = "sans-serif";
-        panel.style.minWidth = "150px";
+    return e.el as HTMLButtonElement;
+  }
 
-        this.root.appendChild(panel);
-        return panel;
+  button(label: string, idOverride?: string): boolean {
+    const id = hash(idOverride ?? label);
+    this.frameIds.push(id);
+
+    const btn = this.getButton(id);
+
+    btn.textContent = label;
+
+    // wichtig: nur EIN handler (kein stacking!)
+    btn.onclick = () => {
+      this.clicked.set(id, true);
+    };
+
+    return this.clicked.get(id) === true;
+  }
+
+  text(label: string, idOverride?: string) {
+    const id = hash(idOverride ?? label);
+    this.frameIds.push(id);
+
+    let e = this.elements.get(id);
+
+    if (!e) {
+      const div = document.createElement("div");
+      div.style.marginBottom = "6px";
+      this.panel.appendChild(div);
+
+      e = { el: div, type: "text" };
+      this.elements.set(id, e);
     }
 
-    begin() {
-        this.state.container.innerHTML = "";
-        this.state.cursorY = 10;
-        this.idCounter = 0;
-    }
-
-    text(label: string) {
-        const el = document.createElement("div");
-        el.textContent = label;
-        el.style.marginBottom = "6px";
-
-        this.state.container.appendChild(el);
-    }
-
-    button(label: string, idOverride?: string): boolean {
-        const key = idOverride ?? label;
-        const id = hash(key);
-
-        const wasClicked = this.clickedMap.get(id) || false;
-        this.clickedMap.set(id, false);
-
-        const btn = document.createElement("button");
-        btn.textContent = label;
-
-        btn.style.display = "block";
-        btn.style.marginBottom = "6px";
-        btn.style.width = "100%";
-        btn.style.padding = "6px";
-        btn.style.background = "#444";
-        btn.style.border = "none";
-        btn.style.color = "white";
-        btn.style.cursor = "pointer";
-
-        btn.onclick = () => {
-            this.clickedMap.set(id, true);
-        };
-
-        this.state.container.appendChild(btn);
-
-        return wasClicked;
-    }
-
-    checkbox(label: string, value: boolean): boolean {
-        const wrapper = document.createElement("label");
-        wrapper.style.display = "block";
-        wrapper.style.marginBottom = "6px";
-
-        const input = document.createElement("input");
-        input.type = "checkbox";
-        input.checked = value;
-
-        wrapper.appendChild(input);
-        wrapper.append(" " + label);
-
-        this.state.container.appendChild(wrapper);
-
-        return input.checked;
-    }
+    e.el.textContent = label;
+  }
 }

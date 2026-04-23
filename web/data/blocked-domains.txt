@@ -3,6 +3,7 @@
 /changelog
 /docs
 /u
+/packages
 
 
 ##### Block Through Redirects

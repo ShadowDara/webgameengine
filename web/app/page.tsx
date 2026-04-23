@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
-      
+
       {/* Hero */}
       <section className="flex flex-col items-center justify-center text-center py-20 md:py-32 px-4 md:px-6">
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6">
@@ -34,7 +34,7 @@ export default function Home() {
             </button>
           </Link>
 
-          <Link href="/changelog" className="w-full sm:w-auto">
+          {/* <Link href="/changelog" className="w-full sm:w-auto">
             <button className="w-full sm:w-auto border border-white px-6 py-3 rounded-xl hover:bg-white hover:text-black transition">
               Changelog
             </button>
@@ -44,8 +44,18 @@ export default function Home() {
             <button className="w-full sm:w-auto border border-white px-6 py-3 rounded-xl hover:bg-white hover:text-black transition">
               Source (Github)
             </button>
-          </Link>
+          </Link> */}
         </div>
+
+        {/* <div className="flex gap-6 text-sm text-gray-500 mt-16">
+          <Link href="/changelog" className="hover:text-white transition">
+            Changelog
+          </Link>
+          <Link href="/source" className="hover:text-white transition">
+            Source
+          </Link>
+        </div> */}
+
       </section>
 
       {/* Features */}
@@ -98,17 +108,30 @@ export default function Home() {
           Start new with samengine and create a new high efficient webgame!
         </p>
 
-        <a href="https://npmjs.com/samengine" target="_blank">
+        <Link href="https://npmjs.com/samengine" target="_blank">
           <button className="w-full sm:w-auto bg-white text-black px-8 py-4 rounded-xl font-semibold hover:bg-gray-200 transition">
             Start now
           </button>
-        </a>
+        </Link>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-zinc-800 py-6 md:py-8 text-center text-gray-500 text-xs md:text-sm px-4">
+        <div className="flex justify-center gap-6 mb-3">
+          <Link href="/changelog" className="hover:text-white transition">
+            Changelog
+          </Link>
+          <Link href="/packages" className="hover:text-white transition">
+            Packages
+          </Link>
+          <Link href="/source" className="hover:text-white transition">
+            Source
+          </Link>
+        </div>
+
         © {new Date().getFullYear()} samengine. All rights reserved.
       </footer>
+
     </main>
   );
 }

@@ -30,6 +30,7 @@
 - Server Reloads when the Config changes
 - fixed a Bug where the wrong config was used
 - fixed a Bug when no Markdown Notes where added
+- Markdown notes are now removed correctly on Game Start
 
 
 ## samengine-build (1.9.2) (22.04.2026)

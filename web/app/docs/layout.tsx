@@ -16,8 +16,11 @@ export default function DocsLayout({
   );
 
   return (
-    <div style={{ display: "flex" }}>
-      <aside style={{ width: "250px", padding: "20px" }} className="bg-zinc-900 min-h-screen">
+    <div className="flex h-screen overflow-hidden">
+      <aside
+        style={{ width: "250px", padding: "20px" }}
+        className="bg-zinc-900 h-screen overflow-y-auto p-5 shrink-0"
+      >
         
         {/* Get back to the Homepage */}
         <p className="mb-2">
@@ -43,9 +46,11 @@ export default function DocsLayout({
 
       <main
         style={{ padding: "20px", flex: 1 }}
-        className="mb-13 mt-8 ml-5"
+        className=" ml-5 flex-1 overflow-y-auto p-5"
       >
-        {children}
+        <div className="mb-13 mt-8">
+          {children}
+        </div>
       </main>
     </div>
   );

@@ -1,3 +1,4 @@
+use fluaterm::{END, ITALIC, PURPLE};
 use serde::{Deserialize, Serialize};
 use std::{
     env, fs,
@@ -234,8 +235,9 @@ fn help() {
 ██║     ██║██║╚██╗██║██╔═██╗ ╚════██║██╔══██║╚██╗ ██╔╝██╔══╝  ██╔══██╗
 ███████╗██║██║ ╚████║██║  ██╗███████║██║  ██║ ╚████╔╝ ███████╗██║  ██║
 ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝
+{}by samengine{}
 
-=== Commands ===
+=== {}Commands{} ===
     help    show this message
     init    create config
     add     add link
@@ -243,8 +245,7 @@ fn help() {
     view    view links
     list    list links
     (none)  open all links
-"#
-    );
+"#, ITALIC, END, PURPLE, END);
 }
 
 // ---------- MAIN ----------

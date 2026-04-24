@@ -1,6 +1,6 @@
-use std::{arch::x86_64::_XCR_XFEATURE_ENABLED_MASK, collections::HashMap, env, fs, path::Path};
+use std::{collections::HashMap, env, fs, path::Path};
 
-use fluaterm::{self, BLUE, END, GREEN, RED, YELLOW};
+use fluaterm::{self, BLUE, END, GREEN, PURPLE, RED, YELLOW};
 use sakeparser::{parse, run_task, validate_all, RuntimeState};
 use win_utf8_rs::enable_utf8;
 
@@ -30,14 +30,16 @@ fn help() {
     PS: The File is named {}samfile{}
     PS: Full Guide about it on {}https://samengine.vercel.app/docs/samfile{}
     
-    Run with --init to create a new samefile in your project directory
+    Run with {}--init{} to create a new samefile in your project directory
 
 {}linksaver{}:
     This is a Tool to save links for your project and then merge them into
     one single file
     
     Use {}{}{} --linksaver -h to get more Information
-    or check {}https://samengine.vercel.app/docs/linksaver{}"#, RED, END, GREEN, END, YELLOW, PROGNAME, END, YELLOW, END, BLUE, END, GREEN, END, YELLOW, PROGNAME, END, BLUE, END);
+    or {}-l{} instead of linksaver
+    check {}https://samengine.vercel.app/docs/linksaver{} for more Infos
+"#, RED, END, GREEN, END, YELLOW, PROGNAME, END, YELLOW, END, BLUE, END, PURPLE, END, GREEN, END, YELLOW, PROGNAME, END, PURPLE, END, BLUE, END);
 }
 
 // Run sth from the samfile

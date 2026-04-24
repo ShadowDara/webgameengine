@@ -1,8 +1,10 @@
-use std::{collections::HashMap, env, fs, path::Path};
+use std::{arch::x86_64::_XCR_XFEATURE_ENABLED_MASK, collections::HashMap, env, fs, path::Path};
 
 use fluaterm::{self, BLUE, END, GREEN, RED, YELLOW};
 use sakeparser::{parse, run_task, validate_all, RuntimeState};
 use win_utf8_rs::enable_utf8;
+
+mod linksaver;
 
 const PROGNAME: &str = "samtool";
 
@@ -28,7 +30,14 @@ fn help() {
     PS: The File is named {}samfile{}
     PS: Full Guide about it on {}https://samengine.vercel.app/docs/samfile{}
     
-    Run with --init to create a new samefile in your project directory"#, RED, END, GREEN, END, YELLOW, PROGNAME, END, YELLOW, END, BLUE, END)
+    Run with --init to create a new samefile in your project directory
+
+{}linksaver{}:
+    This is a Tool to save links for your project and then merge them into
+    one single file
+    
+    Use {}{}{} --linksaver -h to get more Information
+    or check {}https://samengine.vercel.app/docs/linksaver{}"#, RED, END, GREEN, END, YELLOW, PROGNAME, END, YELLOW, END, BLUE, END, GREEN, END, YELLOW, PROGNAME, END, BLUE, END);
 }
 
 // Run sth from the samfile
@@ -102,6 +111,7 @@ fn init() {
         .unwrap()
         .to_string();
 
+    // Check if there is a gitignore
     if has_gitignore(&dir2) {
         if let Some(content) = read_gitignore(&dir2) {
             if is_samfile_ignored(&content) {
@@ -137,6 +147,17 @@ fn main() {
         // Init
         "--init" => {
             init();
+        }
+
+        // Linksaver
+        "--linksaver" | "-l" => {
+            let mut sndarg = "";
+            
+            if args.len() >= 3 {
+                sndarg = &args[2];
+            }
+
+            linksaver::execute(sndarg);
         }
 
         // When not found

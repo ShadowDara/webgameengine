@@ -7,6 +7,9 @@ edition = "2024"
 fluaterm = "0.2.2"
 sakeparser = { path = "../crates/sakeparser" }
 
+[target.'cfg(windows)'.dependencies]
+win-utf8-rs = "0.2.1"
+
 [profile.release]
 opt-level = 3       # 0 -> no optimizing, 3 -> max speed
 lto = "fat"         # oder "thin" für schnelleren Build
